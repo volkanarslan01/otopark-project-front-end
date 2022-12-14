@@ -1,8 +1,9 @@
 import Axios from "axios";
-
+import Particles from "../../Particles.jsx";
 import classes from "./Home.module.scss";
 
 import { useState, useEffect } from "react";
+import Particle from "../../Particles";
 export default function Home() {
   const [message, setMessage] = useState("");
 
@@ -16,7 +17,8 @@ export default function Home() {
 
   return (
     <>
-      <h1>Home</h1>
+      <Particles />
+      {/* <h1>Home</h1>
       <input
         type="text"
         value={message}
@@ -35,7 +37,7 @@ export default function Home() {
           <li>28/19/2023 Pazar - 15.00</li>
           <li> Toplam tutar : 50 TL</li>
         </ul>
-      </div>
+      </div> */}
     </>
   );
 }
