@@ -10,7 +10,6 @@ function App() {
   return (
     <>
       <Particles />
-
       <div>
         <Navbar />
         <div>

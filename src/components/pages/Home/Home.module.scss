@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 li {
   list-style-type: none;
   padding: 0 10px 0 10px;
@@ -6,4 +9,52 @@ li {
 ul {
   display: flex;
   justify-content: center;
+}
+.container {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.dateNow {
+  margin: 10px;
+}
+.box {
+  margin: 50px;
+}
+.date {
+  align-items: center;
+}
+.process {
+  margin: 150px 0 0 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  & p {
+    margin: 0 5px 0 5px;
+  }
+}
+.h2 {
+  margin: 10px;
+  text-align: center;
+}
+.footer {
+  margin: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.footerin {
+  padding: 50px;
+  border: 1px solid gray;
+}
+.btn {
+  width: 100px;
+  height: 28px;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+  border: none;
 }
