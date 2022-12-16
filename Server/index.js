@@ -8,6 +8,10 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+//? jsonwebtoken
+
+const jwt = require("jsonwebtoken");
+
 // ! Modules
 
 // ? use express
@@ -19,6 +23,7 @@ app.use(
   cors({
     origin: ["http://localhost:3000"],
     method: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -27,8 +32,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // ??
 
 app.use(
   session({
-    key: "userID",
-    secret: "secret",
+    key: "userId ",
+    secret: "subscribe",
     resave: false,
     saveUninitialized: false,
     cookie: { expires: 60 * 60 * 24 },
@@ -51,6 +56,25 @@ app.post("/register", (req, res) => {
     );
   });
 });
+const verifyJWT = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    res.send("You , we need to token");
+  } else {
+    jwt.verify(token, "jwtSecret", (err, decoded) => {
+      if (err) {
+        res.json({ auth: false, message: "U failed to authorized" });
+      } else {
+        req.userId = decoded.id;
+        next();
+      }
+    });
+  }
+};
+
+app.get("/isUserAuth", verifyJWT, (req, res) => {
+  res.send("You are authorized Congrats!");
+});
 
 app.get("/login", (req, res) => {
   if (req.session.user) {
@@ -71,15 +95,23 @@ app.post("/login", (req, res) => {
       //? hash parse
       bcrypt.compare(password, result[0].password, (err, response) => {
         if (response) {
+          // ? projede her seferinde girilen username ve password ayni olabilir ama id olamaz buna bagli olarak
+          //? token ureticez
+          const id = result[0].id;
+          const token = jwt.sign({ id }, "jwtsecret", {
+            expiresIn: 300,
+          });
           req.session.user = result;
-          console.log(req.session.user);
-          res.send(result);
+          res.json({ auth: true, token: token, result: result });
         } else {
-          res.send({ message: "Wrong username / password combination!" });
+          res.send({
+            auth: false,
+            message: "Wrong username / password combination!",
+          });
         }
       });
     } else {
-      res.send({ message: "User does not exist ! " });
+      res.json({ auth: false, message: "no users exists" });
     }
   });
 });
