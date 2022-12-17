@@ -40,7 +40,10 @@ app.use(
   })
 );
 app.post("/register", (req, res) => {
-  const username = req.body.username;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const email = req.body.email;
+  const plate = req.body.plate;
   const password = req.body.password;
   // ? use hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -48,33 +51,34 @@ app.post("/register", (req, res) => {
       console.log(err);
     }
     db.query(
-      "INSERT INTO user (username,password) VALUES (?,?)",
-      [username, hash],
+      "INSERT INTO user (firstName,lastName,email,plate,password) VALUES (?,?)",
+      [firstName, lastName, email, plate, hash],
       (err, result) => {
         console.log(err);
       }
     );
   });
 });
-const verifyJWT = (req, res, next) => {
-  const token = req.headers["x-access-token"];
-  if (!token) {
-    res.send("You , we need to token");
-  } else {
-    jwt.verify(token, "jwtSecret", (err, decoded) => {
-      if (err) {
-        res.json({ auth: false, message: "U failed to authorized" });
-      } else {
-        req.userId = decoded.id;
-        next();
-      }
-    });
-  }
-};
 
-app.get("/isUserAuth", verifyJWT, (req, res) => {
-  res.send("You are authorized Congrats!");
-});
+// const verifyJWT = (req, res, next) => {
+//   const token = req.headers["x-access-token"];
+//   if (!token) {
+//     res.send("You , we need to token");
+//   } else {
+//     jwt.verify(token, "jwtSecret", (err, decoded) => {
+//       if (err) {
+//         res.json({ auth: false, message: "U failed to authorized" });
+//       } else {
+//         req.userId = decoded.id;
+//         next();
+//       }
+//     });
+//   }
+// };
+
+// app.get("/isUserAuth", verifyJWT, (req, res) => {
+//   res.send("You are authorized Congrats!");
+// });
 
 app.get("/login", (req, res) => {
   if (req.session.user) {
@@ -85,9 +89,9 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
-  db.query("SELECT * FROM user WHERE username = ?", username, (err, result) => {
+  db.query("SELECT * FROM user WHERE email = ?", email, (err, result) => {
     if (err) {
       res.send({ err: err });
     }
@@ -95,6 +99,7 @@ app.post("/login", (req, res) => {
       //? hash parse
       bcrypt.compare(password, result[0].password, (err, response) => {
         if (response) {
+          console.log("Giris BASARILI");
           // ? projede her seferinde girilen username ve password ayni olabilir ama id olamaz buna bagli olarak
           //? token ureticez
           const id = result[0].id;
@@ -119,14 +124,3 @@ app.post("/login", (req, res) => {
 app.listen(3004, () => {
   console.log("server running on 3004");
 });
-
-// app.use("/register", require("./Routes/register.js"));
-
-// app.post("/veri", (req, res) => {
-//   console.log(req.body);
-//   if (req.body.message === "volkan") {
-//     res.json({ success: true });
-//   } else {
-//     res.json({ success: false });
-//   }
-// });
