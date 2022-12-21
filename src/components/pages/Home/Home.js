@@ -2,17 +2,17 @@ import Axios from "axios";
 import Particles from "../../Particles.jsx";
 import classes from "./Home.module.scss";
 import { useState, useEffect } from "react";
-import Particle from "../../Particles";
 import DateTimePicker from "react-datetime-picker";
+import LastReservations from "./Process/LastReservations.js";
+import MakeReservations from "./Process/MakeReservation.js";
 export default function Home() {
-  const [value, onChange] = useState(new Date());
-
+  const [value, onChange] = useState("");
+  const [value_1, onChanged] = useState("");
   const [message, setMessage] = useState("");
 
   const senderDate = () => {
-    setMessage(value.toLocaleString());
+    setMessage(value.toLocaleString() + "-" + value_1.toLocaleString());
   };
-  console.log(value);
   return (
     <>
       <div className={classes.container}>
@@ -27,13 +27,13 @@ export default function Home() {
             />
             <DateTimePicker
               className={classes.dateNow}
-              onChange={onChange}
-              value={value}
+              onChange={onChanged}
+              value={value_1}
             />
           </div>
         </div>
       </div>
-
+      <MakeReservations />
       <div className={classes.process}>
         <button className={classes.btn} onClick={senderDate}>
           Make
@@ -44,12 +44,7 @@ export default function Home() {
       <h2 className={classes.h2}>My Reservations</h2>
       <div className={classes.footer}>
         <div className={classes.footerin}>
-          <h2> MPark </h2>
-          <p> Muğla/Köyceğiz </p>
-          <p> 14/12/2022 Çarşamba 12:00 - 14/12/2022 Çarşamba 13:00 arasi </p>
-          <p>Rezervasyon Tamamlandı</p>
-          <h2> Volkan Arslan </h2>
-          <p>Ücret: 20 TL </p>
+          <LastReservations />
         </div>
       </div>
     </>

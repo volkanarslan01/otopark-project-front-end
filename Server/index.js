@@ -18,6 +18,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 
 const db = require("./Middleware/mysqlHandler.js");
+const db2 = require("./Middleware/mysql2Handler.js");
 
 app.use(
   cors({
@@ -39,20 +40,47 @@ app.use(
     cookie: { expires: 60 * 60 * 24 },
   })
 );
+app.get("/make", (req, res) => {
+  db2.query("SELECT * FROM otopark", (err, rows) => {
+    res.send(rows);
+  });
+});
+app.get("/maked", (req, res) => {
+  db2.query("SELECT * FROM kat1", (err, rows) => {
+    res.send(rows);
+  });
+});
+app.put("/update", (req, res) => {
+  const kat = req.body.kat1;
+  db2.query("UPDATE kat1 SET state = ?", [kat], (err, rows) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(rows + "undefined");
+    }
+  });
+});
+app.get("/last", (req, res) => {
+  db.query("SELECT * FROM last_reservation", (err, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
   const plate = req.body.plate;
   const password = req.body.password;
+  console.log(firstName, lastName, email, plate, password);
   // ? use hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
     }
     db.query(
-      "INSERT INTO user (firstName,lastName,email,plate,password) VALUES (?,?)",
-      [firstName, lastName, email, plate, hash],
+      "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?)",
+      [firstName, lastName, plate, email, hash],
       (err, result) => {
         console.log(err);
       }
@@ -60,25 +88,25 @@ app.post("/register", (req, res) => {
   });
 });
 
-// const verifyJWT = (req, res, next) => {
-//   const token = req.headers["x-access-token"];
-//   if (!token) {
-//     res.send("You , we need to token");
-//   } else {
-//     jwt.verify(token, "jwtSecret", (err, decoded) => {
-//       if (err) {
-//         res.json({ auth: false, message: "U failed to authorized" });
-//       } else {
-//         req.userId = decoded.id;
-//         next();
-//       }
-//     });
-//   }
-// };
+const verifyJWT = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    res.send("You , we need to token");
+  } else {
+    jwt.verify(token, "jwtSecret", (err, decoded) => {
+      if (err) {
+        res.json({ auth: false, message: "U failed to authorized" });
+      } else {
+        req.userId = decoded.id;
+        next();
+      }
+    });
+  }
+};
 
-// app.get("/isUserAuth", verifyJWT, (req, res) => {
-//   res.send("You are authorized Congrats!");
-// });
+app.get("/isUserAuth", verifyJWT, (req, res) => {
+  res.send("You are authorized Congrats!");
+});
 
 app.get("/login", (req, res) => {
   if (req.session.user) {

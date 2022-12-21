@@ -45,10 +45,6 @@ ul {
   display: flex;
   justify-content: center;
 }
-.footerin {
-  padding: 50px;
-  border: 1px solid gray;
-}
 .btn {
   width: 100px;
   height: 28px;
@@ -57,4 +53,19 @@ ul {
   color: #fff;
   border-radius: 10px;
   border: none;
+}
+.drop {
+  border: 1px solid #333;
+  text-align: center;
+  width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+}
+.drop_2 {
+  margin: 0 10px 0 10px;
+  border: 1px solid #333;
+  text-align: center;
+  width: 200px;
+  padding: 10px;
+  border-radius: 10px;
 }

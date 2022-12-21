@@ -10,14 +10,6 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [plate, setPlate] = useState("");
 
-  Axios.post("/register", {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    plate: plate,
-    password: password,
-  });
-
   const validate = Yup.object({
     firstName: Yup.string()
       .max(15, "Must be 15 characters or less")
@@ -35,6 +27,13 @@ export default function Register() {
     plate: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
+  });
+  Axios.post("/register", {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    plate: plate,
+    password: password,
   });
   return (
     <Formik
