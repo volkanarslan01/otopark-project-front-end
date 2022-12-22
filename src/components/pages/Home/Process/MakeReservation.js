@@ -8,23 +8,25 @@ const MakeReservation = () => {
   const [info, setInfo] = useState([]);
   const [info_2, setInfo_2] = useState([]);
 
+  const [message, setMessage] = useState([]);
+  const [number, setNumber] = useState([]);
+  const numbers = [];
   const options_2 = [];
   const options = [];
+  useEffect(() => {
+    axios.get("/get").then((res) => {
+      setNumber(res.data);
+    });
+  });
 
   useEffect(() => {
-    axios.put("/update", {
-      kat1: 4,
+    axios.get("/maked").then((res) => {
+      setInfo_2(res.data);
     });
   }, []);
-
   useEffect(() => {
     axios.get("make").then((info) => {
       setInfo(info.data);
-    });
-  }, []);
-  useEffect(() => {
-    axios.get("maked").then((info) => {
-      setInfo_2(info.data);
     });
   }, []);
 
@@ -35,8 +37,25 @@ const MakeReservation = () => {
   info_2.map((value) => {
     return options_2.push(value.kat_name);
   });
+
   const defaultOption = options[0];
   const defaultOptionn = options_2[0];
+
+  number.map((value) => {
+    return numbers.push(value.state);
+  });
+
+  const onButton = () => {
+    if (numbers[0] === 0) {
+      setMessage("Yer Kalmadi");
+      return;
+    }
+    numbers[0] -= 1;
+    axios.put("/update", {
+      number: numbers[0],
+    });
+  };
+
   const onChanged = (value) => {
     setSelect(value);
   };
@@ -59,6 +78,13 @@ const MakeReservation = () => {
         placeholder="Select an option"
         className={classes.drop_2}
       />
+
+      <div>
+        <button className={classes.btn} onClick={onButton}>
+          Make
+        </button>
+        <p>{message}</p>
+      </div>
     </div>
   );
 };

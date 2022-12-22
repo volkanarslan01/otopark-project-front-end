@@ -31,10 +31,19 @@ export default function Register() {
   Axios.post("/register", {
     firstName: firstName,
     lastName: lastName,
-    email: email,
     plate: plate,
+    email: email,
     password: password,
   });
+
+  const onSubmitButton = (values) => {
+    console.log(values);
+    setFirstName(values.firstName);
+    setLastName(values.lastName);
+    setEmail(values.email);
+    setPlate(values.plate);
+    setPassword(values.password);
+  };
   return (
     <Formik
       initialValues={{
@@ -44,14 +53,7 @@ export default function Register() {
         plate: "",
         password: "",
       }}
-      validationSchema={validate}
-      onSubmit={(values) => {
-        setFirstName(values.firstName);
-        setLastName(values.lastName);
-        setEmail(values.email);
-        setPlate(values.plate);
-        setPassword(values.password);
-      }}
+      onSubmit={(values) => onSubmitButton(values)}
     >
       {(formik) => (
         <div className="d-flex align-items-center justify-content-center w-100 m-5">

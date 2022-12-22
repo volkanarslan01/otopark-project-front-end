@@ -40,6 +40,13 @@ app.use(
     cookie: { expires: 60 * 60 * 24 },
   })
 );
+
+app.get("/get", (req, res) => {
+  db2.query("SELECT * FROM kat1", (err, rows) => {
+    res.send(rows);
+  });
+});
+
 app.get("/make", (req, res) => {
   db2.query("SELECT * FROM otopark", (err, rows) => {
     res.send(rows);
@@ -51,12 +58,10 @@ app.get("/maked", (req, res) => {
   });
 });
 app.put("/update", (req, res) => {
-  const kat = req.body.kat1;
+  const kat = req.body.number;
   db2.query("UPDATE kat1 SET state = ?", [kat], (err, rows) => {
     if (err) {
       console.log(err);
-    } else {
-      console.log(rows + "undefined");
     }
   });
 });
@@ -66,25 +71,26 @@ app.get("/last", (req, res) => {
     console.log(result);
   });
 });
+
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
   const plate = req.body.plate;
   const password = req.body.password;
+  const sql =
+    "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?)";
   console.log(firstName, lastName, email, plate, password);
   // ? use hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
+    } else {
+      console.log(hash);
     }
-    db.query(
-      "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?)",
-      [firstName, lastName, plate, email, hash],
-      (err, result) => {
-        console.log(err);
-      }
-    );
+    db.query(sql, [firstName, lastName, plate, email, hash], (err, result) => {
+      console.log(result);
+    });
   });
 });
 

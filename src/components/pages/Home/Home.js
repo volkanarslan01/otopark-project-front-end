@@ -34,13 +34,6 @@ export default function Home() {
         </div>
       </div>
       <MakeReservations />
-      <div className={classes.process}>
-        <button className={classes.btn} onClick={senderDate}>
-          Make
-        </button>
-
-        <p>{message}</p>
-      </div>
       <h2 className={classes.h2}>My Reservations</h2>
       <div className={classes.footer}>
         <div className={classes.footerin}>
