@@ -17,6 +17,7 @@ const jwt = require("jsonwebtoken");
 // ? use express
 const app = express();
 
+// ? mysql page connect
 const db = require("./Middleware/mysqlHandler.js");
 const db2 = require("./Middleware/mysql2Handler.js");
 
@@ -41,35 +42,53 @@ app.use(
   })
 );
 
-app.get("/get", (req, res) => {
-  db2.query("SELECT * FROM kat1", (err, rows) => {
+// ? otopark get
+app.get("/otopark", (req, res) => {
+  let sql = "Select * from otopark ";
+  db2.query(sql, (err, rows) => {
+    if (err) {
+      throw err;
+    }
     res.send(rows);
   });
 });
 
-app.get("/make", (req, res) => {
-  db2.query("SELECT * FROM otopark", (err, rows) => {
-    res.send(rows);
-  });
-});
-app.get("/maked", (req, res) => {
-  db2.query("SELECT * FROM kat1", (err, rows) => {
-    res.send(rows);
-  });
-});
-app.put("/update", (req, res) => {
-  const kat = req.body.number;
-  db2.query("UPDATE kat1 SET state = ?", [kat], (err, rows) => {
+// ? users get
+app.get("/users", (req, res) => {
+  let sql = "Select * from user where id = 8";
+  db.query(sql, (err, rows) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
+    res.send(rows);
   });
 });
-app.get("/last", (req, res) => {
-  db.query("SELECT * FROM last_reservation", (err, result) => {
-    res.send(result);
-    console.log(result);
-  });
+
+// ! post process
+
+app.post("/lastReservations", (req, res) => {
+  const parkName = req.body.parkName;
+  const place = req.body.place;
+  const timeInterval = req.body.timeInterval;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const pay = req.body.pay;
+  const state = req.body.state;
+
+  let sql =
+    "INSERT INTO last_reservation (parkName,place,timeInterval,firstName,lastName,pay,state) Values (?,?,?,?,?,?,?)";
+
+  db.query(
+    sql,
+    [parkName, place, timeInterval, firstName, lastName, pay, state],
+    (err, rows) => {
+      if (err) {
+        throw err;
+      } else {
+        console.log(rows);
+      }
+    }
+  );
 });
 
 app.post("/register", (req, res) => {

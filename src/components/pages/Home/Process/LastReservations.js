@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "../../../../Api/axios";
 
 import classes from "../Process/LastReservation.module.scss";
-
 const LastReservation = () => {
   const [list, setList] = useState([]);
   useEffect(() => {
@@ -22,7 +21,6 @@ const LastReservation = () => {
           lastName,
           pay,
           state,
-          create_date,
         } = item;
         return (
           <div className={classes.box}>

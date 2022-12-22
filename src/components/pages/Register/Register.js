@@ -53,6 +53,7 @@ export default function Register() {
         plate: "",
         password: "",
       }}
+      validate={validate}
       onSubmit={(values) => onSubmitButton(values)}
     >
       {(formik) => (
