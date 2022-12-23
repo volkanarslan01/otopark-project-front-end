@@ -64,7 +64,7 @@ app.get("/users", (req, res) => {
   });
 });
 
-// ! post process
+// ! lastReservation Process
 app.post("/lastReservations", (req, res) => {
   const parkName = req.body.parkName;
   const place = req.body.place;
@@ -90,13 +90,13 @@ app.post("/lastReservations", (req, res) => {
   );
 });
 
+// ! register portion
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
   const plate = req.body.plate;
   const password = req.body.password;
-  console.log(firstName);
   const sql =
     "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?,?,?,?)";
   // ? use hash password
@@ -107,7 +107,11 @@ app.post("/register", (req, res) => {
       console.log(hash);
     }
     db.query(sql, [firstName, lastName, plate, email, hash], (err, result) => {
-      console.log(result);
+      if (err) {
+        res.send(err);
+      } else {
+        console.log(result);
+      }
     });
   });
 });
@@ -154,12 +158,20 @@ app.post("/login", (req, res) => {
       console.log(result);
       bcrypt.compare(password, result[0].password, (err, response) => {
         if (response) {
+          app.get("/last", (req, res) => {
+            let sql = "SELECT * FROM last_reservation";
+            db.query(sql, [email], (err, result) => {
+              if (err) res.send({ err: err });
+              res.send(result);
+            });
+          });
           console.log("Giris BASARILI");
         }
       });
     }
   });
 });
+
 // ?  port listen listen all finally
 app.listen(3004, () => {
   console.log("server running on 3004");

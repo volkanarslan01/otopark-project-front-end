@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import axios from "../../../../Api/axios";
 
 import classes from "../Process/LastReservation.module.scss";
+
 const LastReservation = () => {
+  const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
   useEffect(() => {
-    axios.get("/last").then((response) => {
-      setList(response.data);
-    });
+    try {
+      axios.get("/last").then((response) => {
+        setList(response.data);
+      });
+    } catch (err) {
+      setMessage(err);
+    }
   }, []);
 
   return (
@@ -24,6 +30,7 @@ const LastReservation = () => {
         } = item;
         return (
           <div className={classes.box}>
+            {message ? <h4>{message}</h4> : null}
             <h2>{parkName}</h2>
             <label>Place</label>
             <h3>{place}</h3>
