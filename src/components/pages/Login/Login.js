@@ -13,13 +13,18 @@ export default function Login() {
       .min(8, "Password must be at least 6 charaters")
       .required("Password is required"),
   });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  Axios.post("/login", {
-    email: email,
-    password: password,
-  });
+  const [err, setError] = useState("");
+  const onClick = (values) => {
+    try {
+      Axios.post("/login", {
+        email: values.email,
+        password: values.password,
+      });
+    } catch (error) {
+      setError(error);
+    }
+  };
 
   return (
     <Formik
@@ -28,10 +33,7 @@ export default function Login() {
         password: "",
       }}
       validationSchema={validate}
-      onSubmit={(values) => {
-        setEmail(values.email);
-        setPassword(values.password);
-      }}
+      onSubmit={(values) => onClick(values)}
     >
       {(formik) => (
         <div className="d-flex align-items-center justify-content-center w-100 m-5">
@@ -44,6 +46,7 @@ export default function Login() {
             <button className="btn btn-dark m-3" type="reset">
               Reset
             </button>
+            {err ? <h4 className={classes.error}>{err}</h4> : null}
           </Form>
         </div>
       )}

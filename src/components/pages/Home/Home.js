@@ -8,9 +8,10 @@ export default function Home() {
       <div className={classes.container}>
         <div className={classes.box}>
           <h2> Make Reservations</h2>
+          <MakeReservations />
         </div>
       </div>
-      <MakeReservations />
+
       <h2 className={classes.h2}>My Reservations</h2>
       <div className={classes.footer}>
         <div className={classes.footerin}>

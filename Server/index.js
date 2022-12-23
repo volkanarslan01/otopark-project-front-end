@@ -65,7 +65,6 @@ app.get("/users", (req, res) => {
 });
 
 // ! post process
-
 app.post("/lastReservations", (req, res) => {
   const parkName = req.body.parkName;
   const place = req.body.place;
@@ -97,9 +96,9 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const plate = req.body.plate;
   const password = req.body.password;
+  console.log(firstName);
   const sql =
-    "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?)";
-  console.log(firstName, lastName, email, plate, password);
+    "INSERT INTO user (first_name,last_name,plate,email,password) VALUES (?,?,?,?,?)";
   // ? use hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
@@ -113,33 +112,35 @@ app.post("/register", (req, res) => {
   });
 });
 
-const verifyJWT = (req, res, next) => {
-  const token = req.headers["x-access-token"];
-  if (!token) {
-    res.send("You , we need to token");
-  } else {
-    jwt.verify(token, "jwtSecret", (err, decoded) => {
-      if (err) {
-        res.json({ auth: false, message: "U failed to authorized" });
-      } else {
-        req.userId = decoded.id;
-        next();
-      }
-    });
-  }
-};
+// ! token portion
+// const verifyJWT = (req, res, next) => {
+//   const token = req.headers["x-access-token"];
+//   if (!token) {
+//     res.send("You , we need to token");
+//   } else {
+//     jwt.verify(token, "jwtSecret", (err, decoded) => {
+//       if (err) {
+//         res.json({ auth: false, message: "U failed to authorized" });
+//       } else {
+//         req.userId = decoded.id;
+//         next();
+//       }
+//     });
+//   }
+// };
 
-app.get("/isUserAuth", verifyJWT, (req, res) => {
-  res.send("You are authorized Congrats!");
-});
+// app.get("/isUserAuth", verifyJWT, (req, res) => {
+//   res.send("You are authorized Congrats!");
+// });
 
-app.get("/login", (req, res) => {
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
-});
+// ! login process
+// app.get("/login", (req, res) => {
+//   if (req.session.user) {
+//     res.send({ loggedIn: true, user: req.session.user });
+//   } else {
+//     res.send({ loggedIn: false });
+//   }
+// });
 
 app.post("/login", (req, res) => {
   const email = req.body.email;
@@ -150,26 +151,12 @@ app.post("/login", (req, res) => {
     }
     if (result.length > 0) {
       //? hash parse
+      console.log(result);
       bcrypt.compare(password, result[0].password, (err, response) => {
         if (response) {
           console.log("Giris BASARILI");
-          // ? projede her seferinde girilen username ve password ayni olabilir ama id olamaz buna bagli olarak
-          //? token ureticez
-          const id = result[0].id;
-          const token = jwt.sign({ id }, "jwtsecret", {
-            expiresIn: 300,
-          });
-          req.session.user = result;
-          res.json({ auth: true, token: token, result: result });
-        } else {
-          res.send({
-            auth: false,
-            message: "Wrong username / password combination!",
-          });
         }
       });
-    } else {
-      res.json({ auth: false, message: "no users exists" });
     }
   });
 });
