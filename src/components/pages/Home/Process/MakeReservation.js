@@ -13,12 +13,13 @@ const MakeReservation = () => {
   const [value, onChange] = useState("");
   const [value_1, onChanged] = useState("");
 
-  const [first_name, setfirst_name] = useState("");
-  const [last_name, setlast_name] = useState("");
-  const [place_name, setplace] = useState("");
-  const [pay, setpay] = useState(0);
-  const [state, setstate] = useState(0);
-  const [parkName, setparkName] = useState("");
+  const [_first_name, setfirst_name] = useState("");
+  const [_last_name, setlast_name] = useState("");
+  const [_place_name, setplace] = useState("");
+  const [_pay, setpay] = useState(0);
+  const [_state, setstate] = useState(0);
+  const [_parkName, setparkName] = useState("");
+  const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
 
   const [item, setitem] = useState("");
@@ -52,23 +53,23 @@ const MakeReservation = () => {
       .catch((err) => {
         return err;
       });
-  });
+  }, []);
 
   // ? data placement
   useEffect(() => {
     data.map((data_2) => {
-      if (data_2.id === 2) {
-        // setitem(data_2);
-        setparkName(data_2.parkName);
-        setplace(data_2.place);
-        setpay(data_2.hourly_pay);
-        setstate(data_2.state);
-        setopenHours(data_2.open_hours);
-      }
+      setparkName(data_2.parkName);
+      setplace(data_2.place);
+      setpay(data_2.hourly_pay);
+      setstate(data_2.state);
+      setopenHours(data_2.open_hours);
     });
     userData.map((userData) => {
-      setfirst_name(userData.first_name);
-      setlast_name(userData.last_name);
+      if (userData.id === 2) {
+        setfirst_name(userData.first_name);
+        setlast_name(userData.last_name);
+        setemail(userData.email);
+      }
     });
   });
   // ! data processing
@@ -76,13 +77,14 @@ const MakeReservation = () => {
     try {
       if (value && value_1) {
         axios.post("/lastReservations", {
-          parkName: parkName,
-          place: place_name,
+          parkName: _parkName,
+          place: _place_name,
           timeInterval: `${value.toLocaleString()} ${value_1.toLocaleString()}`,
-          firstName: first_name,
-          lastName: last_name,
-          pay: pay,
-          state: state,
+          firstName: _first_name,
+          lastName: _last_name,
+          pay: _pay,
+          state: _state,
+          email: _email,
         });
       }
     } catch (err) {
@@ -130,3 +132,8 @@ const MakeReservation = () => {
   );
 };
 export default MakeReservation;
+// ? proje yuklendiginde otoparklari getirme kismi
+// ! secilen otopark gore katlari getirme
+// * login islemi olmadan giris yapmasin..
+// ? hesaplamalari ayarla database update islemleri gibi
+// ? saate gorw

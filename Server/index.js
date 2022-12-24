@@ -53,17 +53,6 @@ app.get("/otopark", (req, res) => {
   });
 });
 
-// ? users get
-app.get("/users", (req, res) => {
-  let sql = "Select * from user where id = 8";
-  db.query(sql, (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    res.send(rows);
-  });
-});
-
 // ! lastReservation Process
 app.post("/lastReservations", (req, res) => {
   const parkName = req.body.parkName;
@@ -73,13 +62,14 @@ app.post("/lastReservations", (req, res) => {
   const lastName = req.body.lastName;
   const pay = req.body.pay;
   const state = req.body.state;
+  const email = req.body.email;
 
   let sql =
-    "INSERT INTO last_reservation (parkName,place,timeInterval,firstName,lastName,pay,state) Values (?,?,?,?,?,?,?)";
+    "INSERT INTO last_reservation (parkName,place,timeInterval,firstName,lastName,pay,state,email) Values (?,?,?,?,?,?,?,?)";
 
   db.query(
     sql,
-    [parkName, place, timeInterval, firstName, lastName, pay, state],
+    [parkName, place, timeInterval, firstName, lastName, pay, state, email],
     (err, rows) => {
       if (err) {
         throw err;
@@ -145,9 +135,9 @@ app.post("/register", (req, res) => {
 //     res.send({ loggedIn: false });
 //   }
 // });
-
+let email = "";
 app.post("/login", (req, res) => {
-  const email = req.body.email;
+  email += req.body.email;
   const password = req.body.password;
   db.query("SELECT * FROM user WHERE email = ?", email, (err, result) => {
     if (err) {
@@ -157,18 +147,43 @@ app.post("/login", (req, res) => {
       //? hash parse
       console.log(result);
       bcrypt.compare(password, result[0].password, (err, response) => {
-        if (response) {
-          app.get("/last", (req, res) => {
-            let sql = "SELECT * FROM last_reservation";
-            db.query(sql, [email], (err, result) => {
-              if (err) res.send({ err: err });
-              res.send(result);
-            });
-          });
-          console.log("Giris BASARILI");
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(response);
         }
       });
     }
+  });
+});
+
+// ? last get
+
+app.get("/last", (req, res) => {
+  let sql = "Select * from last_reservation where email = ? ";
+  db.query(sql, [email], (err, rows) => {
+    if (err) res.send({ error: err });
+    res.send(rows);
+  });
+});
+
+// ? users get
+app.get("/users", (req, res) => {
+  let sql = "Select * from user where email = ? ";
+  db.query(sql, [email], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.send(rows);
+  });
+});
+app.get("/header", (req, res) => {
+  let sql = "Select * from user where email = ? ";
+  db.query(sql, [email], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.send(rows);
   });
 });
 

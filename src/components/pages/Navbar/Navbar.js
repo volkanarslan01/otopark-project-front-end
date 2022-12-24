@@ -1,13 +1,19 @@
-import { useRef } from "react";
-import Home from "../Home/Home.js";
-import Login from "../Login/Login.js";
-import Register from "../Register/Register";
-import About from "../About/About.js";
+import { useRef, useEffect, useState } from "react";
+
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
+import axios from "../../../Api/axios.js";
 
 function Navbar() {
+  const [list, setList] = useState([]);
+  try {
+    axios.get("/header").then((res) => {
+      setList(res.data);
+    });
+  } catch (err) {
+    throw new Error();
+  }
   const navRef = useRef();
 
   const showNavbar = () => {
@@ -16,7 +22,13 @@ function Navbar() {
 
   return (
     <header className={classes.header}>
-      <h3>LOGO</h3>
+      {list.map((item) => {
+        return (
+          <h6>
+            {item.first_name} {item.last_name}
+          </h6>
+        );
+      })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
         <Link to="/login">Login</Link>

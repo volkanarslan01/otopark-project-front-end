@@ -27,6 +27,7 @@ const LastReservation = () => {
           lastName,
           pay,
           state,
+          email,
         } = item;
         return (
           <div className={classes.box}>
@@ -42,6 +43,8 @@ const LastReservation = () => {
             </h2>
             <label>Pay</label>
             <p>{pay} TL</p>
+            <label>Email</label>
+            <h6>{email}</h6>
             <label>State</label>
             <h5>{state ? "Gerçekleşiyor" : "Gerçekleşmedi"}</h5>
           </div>
@@ -51,3 +54,5 @@ const LastReservation = () => {
   );
 };
 export default LastReservation;
+
+// ? database username kismi eklenecek ve bununla reservation yapilacak.
