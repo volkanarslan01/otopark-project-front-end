@@ -11,6 +11,7 @@
     "boostrap": "^2.0.0",
     "bootstrap": "^5.2.3",
     "formik": "^2.2.9",
+    "milliseconds": "^1.0.3",
     "react": "^18.2.0",
     "react-datetime-picker": "^4.1.1",
     "react-dom": "^18.2.0",

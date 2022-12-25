@@ -55,9 +55,10 @@ app.get("/otopark", (req, res) => {
 
 // ! lastReservation Process
 app.post("/lastReservations", (req, res) => {
+  const time_1 = req.body.time_1;
+  const time_2 = req.body.time_2;
   const parkName = req.body.parkName;
   const place = req.body.place;
-  const timeInterval = req.body.timeInterval;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const pay = req.body.pay;
@@ -65,11 +66,11 @@ app.post("/lastReservations", (req, res) => {
   const email = req.body.email;
 
   let sql =
-    "INSERT INTO last_reservation (parkName,place,timeInterval,firstName,lastName,pay,state,email) Values (?,?,?,?,?,?,?,?)";
+    "INSERT INTO last_reservation (parkName,place,time_1,firstName,lastName,pay,state,email,time_2) Values (?,?,?,?,?,?,?,?,?)";
 
   db.query(
     sql,
-    [parkName, place, timeInterval, firstName, lastName, pay, state, email],
+    [parkName, place, time_1, firstName, lastName, pay, state, email, time_2],
     (err, rows) => {
       if (err) {
         throw err;

@@ -22,7 +22,8 @@ const LastReservation = () => {
         const {
           parkName,
           place,
-          timeInterval,
+          time_1,
+          time_2,
           firstName,
           lastName,
           pay,
@@ -36,7 +37,7 @@ const LastReservation = () => {
             <label>Place</label>
             <h3>{place}</h3>
             <label>Time Interval</label>
-            <h6>{timeInterval}</h6>
+            <h6>{time_1.toLocaleString() + " " + time_2.toLocaleString()}</h6>
             <label>Name - Surname</label>
             <h2>
               {firstName} {lastName}
