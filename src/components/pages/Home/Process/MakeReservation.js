@@ -22,7 +22,8 @@ const MakeReservation = () => {
   const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
 
-  const [item, setitem] = useState("");
+  const [_kat_state, setkat_state] = useState(0);
+  const [item, setitem] = useState([]);
   const [selected, setselected] = useState("");
   const [selected_2, setselected_2] = useState("");
 
@@ -37,7 +38,7 @@ const MakeReservation = () => {
       .get("/otopark")
       .then((res) => {
         setData(res.data);
-        return;
+        setitem(res.data);
       })
       .catch((err) => {
         return err;
@@ -57,21 +58,37 @@ const MakeReservation = () => {
 
   // ? data placement
   useEffect(() => {
+    console.log(selected.value);
     data.map((data_2) => {
-      setparkName(data_2.parkName);
-      setplace(data_2.place);
-      setpay(data_2.hourly_pay);
-      setstate(data_2.state);
-      setopenHours(data_2.open_hours);
-    });
-    userData.map((userData) => {
-      if (userData.id === 2) {
-        setfirst_name(userData.first_name);
-        setlast_name(userData.last_name);
-        setemail(userData.email);
+      if (selected.value === data_2.parkName) {
+        setkat_state(data_2.kat_state);
+        setparkName(data_2.parkName);
+        setplace(data_2.place);
+        setpay(data_2.hourly_pay);
+        setstate(data_2.state);
+        setopenHours(data_2.open_hours);
       }
     });
+    userData.map((userData) => {
+      setfirst_name(userData.first_name);
+      setlast_name(userData.last_name);
+      setemail(userData.email);
+    });
+
+    let arr = item.map((item) => {
+      return item.parkName;
+    });
+    arr.forEach((item) => {
+      options.push(item);
+    });
   });
+
+  // ? selected kat process
+
+  // useEffect(() => {
+  //   axios.get("/select");
+  // });
+
   // ! data processing
   const onClick = () => {
     try {
@@ -85,6 +102,14 @@ const MakeReservation = () => {
           pay: _pay,
           state: _state,
           email: _email,
+        });
+      }
+      if (_kat_state === 0 && _kat_state < 0) return;
+      else {
+        const kat = _kat_state - 1;
+        axios.put("/update", {
+          kat_state: kat,
+          park_name: _parkName,
         });
       }
     } catch (err) {
@@ -113,15 +138,16 @@ const MakeReservation = () => {
           <Dropdown
             className={classes.dropdown}
             options={options}
-            onChange={selected}
+            onChange={setselected}
             value={defaultOption}
-            placeholder="Select an option"
+            placeholder="Select an Park"
           />
           <Dropdown
             className={classes.dropdown}
+            onChange={setselected_2}
             options={options_2}
             value={defaultOption_2}
-            placeholder="Select an option"
+            placeholder="Select an Kat"
           />
         </div>
         <button className={classes.btn} onClick={onClick}>
@@ -134,6 +160,5 @@ const MakeReservation = () => {
 export default MakeReservation;
 // ? proje yuklendiginde otoparklari getirme kismi
 // ! secilen otopark gore katlari getirme
-// * login islemi olmadan giris yapmasin..
 // ? hesaplamalari ayarla database update islemleri gibi
 // ? saate gorw

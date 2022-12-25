@@ -187,6 +187,21 @@ app.get("/header", (req, res) => {
   });
 });
 
+// ! update process
+
+app.put("/update", (req, res) => {
+  const kat = req.body.kat_state;
+  const parkName = req.body.park_name;
+  let sql = "UPDATE otopark SET kat_state = ?  WHERE parkName = ? ";
+  console.log(kat, parkName);
+  db2.query(sql, [kat, parkName], (err, rows) => {
+    if (err) {
+      throw err;
+    } else {
+      res.send(rows);
+    }
+  });
+});
 // ?  port listen listen all finally
 app.listen(3004, () => {
   console.log("server running on 3004");
