@@ -30,6 +30,8 @@ const LastReservation = () => {
           state,
           email,
         } = item;
+        const date = new Date(time_1);
+        const date_2 = new Date(time_2);
         return (
           <div className={classes.box}>
             {message ? <h4>{message}</h4> : null}
@@ -37,7 +39,7 @@ const LastReservation = () => {
             <label>Place</label>
             <h3>{place}</h3>
             <label>Time Interval</label>
-            <h6>{time_1.toLocaleString() + " " + time_2.toLocaleString()}</h6>
+            <h6>{date.toLocaleString() + "-" + date_2.toLocaleString()}</h6>
             <label>Name - Surname</label>
             <h2>
               {firstName} {lastName}
@@ -47,7 +49,7 @@ const LastReservation = () => {
             <label>Email</label>
             <h6>{email}</h6>
             <label>State</label>
-            <h5>{state ? "Gerçekleşiyor" : "Gerçekleşmedi"}</h5>
+            <h5>{state ? "Gerçekleşmedi" : "Gerçekleşti"}</h5>
           </div>
         );
       })}

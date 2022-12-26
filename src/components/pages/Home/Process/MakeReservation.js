@@ -5,14 +5,14 @@ import { useState, useEffect } from "react";
 import axios from "../../../../Api/axios";
 import DateTimePicker from "react-datetime-picker";
 const MakeReservation = () => {
+  // ? message
   const [message, setMessage] = useState("");
 
-  const [data, setData] = useState([]);
-  const [userData, setUserData] = useState([]);
-
+  // ! date state
   const [value, onChange] = useState(new Date());
   const [value_1, onChanged] = useState(new Date());
 
+  // ? state
   const [_first_name, setfirst_name] = useState("");
   const [_last_name, setlast_name] = useState("");
   const [_place_name, setplace] = useState("");
@@ -21,19 +21,27 @@ const MakeReservation = () => {
   const [_parkName, setparkName] = useState("");
   const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
-
   const [_kat_state, setkat_state] = useState(0);
+
+  // ? items
   const [item, setitem] = useState([]);
   const [item_2, setitem_2] = useState([]);
+  const [data, setData] = useState([]);
+  const [userData, setUserData] = useState([]);
+
+  // ! controller
+  const [item_controller, setitem_controller] = useState([]);
+
+  // * selected
   const [selected, setselected] = useState("");
   const [selected_2, setselected_2] = useState("");
 
+  // ? values
   let options = [];
-
+  let now = new Date();
   const options_2 = [];
 
   // ? get data
-
   useEffect(() => {
     axios
       .get("/otopark")
@@ -78,7 +86,6 @@ const MakeReservation = () => {
       setlast_name(userData.last_name);
       setemail(userData.email);
     });
-
     let arr = item.map((item) => {
       return item.parkName;
     });
@@ -86,29 +93,67 @@ const MakeReservation = () => {
       options.push(item);
     });
 
-    let arr_2 = item_2.map((item) => {
-      if (selected.value === item.parkName) return item.kat_name;
+    item_2.map((item) => {
+      if (selected.value === item.parkName)
+        return options_2.push(item.kat_name);
     });
-    options_2.push(arr_2);
   });
 
   // ? update state controller
 
   useEffect(() => {
     axios.get("/last").then((res) => {
+      setitem_controller(res.data);
       console.log(res.data);
+    });
+  }, []);
+
+  // ? date later update
+  useEffect(() => {
+    let date = item_controller.map((item) => {
+      let kat;
+      let state;
+      if (now.getTime() === item.time_2) {
+        kat = _kat_state + 1;
+        state = 0;
+        axios.put("/state", {
+          state: state,
+          kat: kat,
+          parkName: item.parkName,
+        });
+      }
     });
   }, []);
 
   // ! data processing
   const onClick = () => {
     try {
-      if (value.getTime() === value_1.getTime()) {
+      if (!_email) {
+        setMessage("Please enter a user");
+        return;
+      } else if (value.getTime() === value_1.getTime()) {
         setMessage("Same values entered");
+        return;
+      } else if (
+        value_1.getTime() < value.getTime() &&
+        now.getTime() < value.getTime() &&
+        now.getTime() < value_1.getTime()
+      ) {
+        setMessage("history data cannot be entered");
       }
-
       // ! make reservations portion
       else if (value && value_1 && _email) {
+        // ! calculator
+        let result = value_1.getTime() - value.getTime();
+        let pay = 0;
+        function convertMstoTime(milisecond) {
+          let seconds = Math.floor(milisecond / 1000);
+          let minutes = Math.floor(seconds / 60);
+          let hours = Math.floor(minutes / 60);
+          pay = hours * _pay;
+        }
+        convertMstoTime(result);
+
         axios.post("/lastReservations", {
           parkName: _parkName,
           place: _place_name,
@@ -116,30 +161,32 @@ const MakeReservation = () => {
           time_2: value_1.getTime(),
           firstName: _first_name,
           lastName: _last_name,
-          pay: _pay,
+          pay: pay,
           state: _state,
           email: _email,
         });
-      }
-      if (_kat_state === 0 && _kat_state < 0) {
-        setMessage("Parking is now full");
-      } else {
-        const kat = _kat_state - 1;
-        axios.put("/update", {
-          kat_state: kat,
-          park_name: _parkName,
-        });
+        if (_kat_state === 0 && _kat_state < 0) {
+          setMessage("Parking is now full");
+        } else if (_email) {
+          const kat = _kat_state - 1;
+          axios.put("/update", {
+            kat_state: kat,
+            park_name: _parkName,
+          });
+        }
       }
     } catch (err) {
       setMessage(err);
     }
   };
 
+  // * default options
   const defaultOption = options[0];
   const defaultOption_2 = options_2[0];
 
   return (
     <>
+      {/* DateTime  */}
       <h4 className={classes.h4}>{message}</h4>
       <div className={classes.date}>
         <DateTimePicker
@@ -152,6 +199,8 @@ const MakeReservation = () => {
           onChange={onChanged}
           value={value_1}
         />
+
+        {/*!! Drop Down */}
         <div className={classes.process}>
           <Dropdown
             className={classes.dropdown}
@@ -168,6 +217,7 @@ const MakeReservation = () => {
             placeholder="Select an Kat"
           />
         </div>
+        {/* Make reservations */}
         <button className={classes.btn} onClick={onClick}>
           Make
         </button>
@@ -176,5 +226,9 @@ const MakeReservation = () => {
   );
 };
 export default MakeReservation;
+
 // ? hesaplamalari ayarla database update islemleri gibi
-// ? saate gorw
+// ? saate gore hesaplama
+
+// ! google maps getir
+// ! google maps ile otopark isaretle  aranan konumdaki
