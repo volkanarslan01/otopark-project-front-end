@@ -227,8 +227,6 @@ const MakeReservation = () => {
 };
 export default MakeReservation;
 
-// ? hesaplamalari ayarla database update islemleri gibi
-// ? saate gore hesaplama
-
+// ! projede database durumunu detayli goster secilen databasesin 
 // ! google maps getir
 // ! google maps ile otopark isaretle  aranan konumdaki

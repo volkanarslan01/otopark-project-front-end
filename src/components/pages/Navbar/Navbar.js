@@ -33,7 +33,7 @@ function Navbar() {
         <Link to="/">Home</Link>
         <Link to="/login">Login</Link>
         <Link to="/register">Register</Link>
-        <Link to="/about">About</Link>
+        <Link to="/about">Maps</Link>
 
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}

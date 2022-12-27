@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^2.4.5",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@react-google-maps/api": "^2.17.1",
+    "framer-motion": "^8",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
