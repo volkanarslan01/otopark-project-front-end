@@ -69,17 +69,12 @@ const MakeReservation = () => {
   // ? data placement
   useEffect(() => {
     data.map((data_2) => {
-      if (
-        selected.value === data_2.parkName &&
-        selected_2.value === data_2.kat_name
-      ) {
-        setkat_state(data_2.kat_state);
-        setparkName(data_2.parkName);
-        setplace(data_2.place);
-        setpay(data_2.hourly_pay);
-        setstate(data_2.state);
-        setopenHours(data_2.open_hours);
-      }
+      setkat_state(data_2.kat_state);
+      setparkName(data_2.parkName);
+      setplace(data_2.place);
+      setpay(data_2.hourly_pay);
+      setstate(data_2.state);
+      setopenHours(data_2.open_hours);
     });
     userData.map((userData) => {
       setfirst_name(userData.first_name);
@@ -110,12 +105,13 @@ const MakeReservation = () => {
 
   // ? date later update
   useEffect(() => {
-    let date = item_controller.map((item) => {
-      let kat;
-      let state;
-      if (now.getTime() === item.time_2) {
-        kat = _kat_state + 1;
-        state = 0;
+    item_controller.map((item) => {
+      if (
+        now.getTime() === item.time_2 ||
+        (now.getTime() < item.time_2 && item.email === _email)
+      ) {
+        const kat = _kat_state + 1;
+        const state = 0;
         axios.put("/state", {
           state: state,
           kat: kat,
@@ -123,7 +119,7 @@ const MakeReservation = () => {
         });
       }
     });
-  }, []);
+  });
 
   // ! data processing
   const onClick = () => {
@@ -135,11 +131,16 @@ const MakeReservation = () => {
         setMessage("Same values entered");
         return;
       } else if (
-        value_1.getTime() < value.getTime() &&
-        now.getTime() < value.getTime() &&
-        now.getTime() < value_1.getTime()
+        value.getTime() > value_1.getTime() &&
+        now.getTime() < value_1.getTime() &&
+        now.getTime() > value.getTime()
       ) {
         setMessage("history data cannot be entered");
+        return;
+      }
+      if (selected === "" && selected_2 === "") {
+        setMessage("No operation without parking name and floor selected");
+        return;
       }
       // ! make reservations portion
       else if (value && value_1 && _email) {
@@ -165,7 +166,7 @@ const MakeReservation = () => {
           state: _state,
           email: _email,
         });
-        if (_kat_state === 0 && _kat_state < 0) {
+        if (_kat_state === 0) {
           setMessage("Parking is now full");
         } else if (_email) {
           const kat = _kat_state - 1;
@@ -226,7 +227,3 @@ const MakeReservation = () => {
   );
 };
 export default MakeReservation;
-
-// ! projede database durumunu detayli goster secilen databasesin 
-// ! google maps getir
-// ! google maps ile otopark isaretle  aranan konumdaki

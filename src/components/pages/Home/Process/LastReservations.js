@@ -35,6 +35,7 @@ const LastReservation = () => {
         return (
           <div className={classes.box}>
             {message ? <h4>{message}</h4> : null}
+            <label>Park Name</label>
             <h2>{parkName}</h2>
             <label>Place</label>
             <h3>{place}</h3>
@@ -50,6 +51,7 @@ const LastReservation = () => {
             <h6>{email}</h6>
             <label>State</label>
             <h5>{state ? "Gerçekleşmedi" : "Gerçekleşti"}</h5>
+            <hr />
           </div>
         );
       })}
