@@ -206,17 +206,18 @@ app.put("/update", (req, res) => {
 
 app.put("/state", (req, res) => {
   const state = req.body.state;
+  const id = req.body.id;
   const parkName = req.body.parkNname;
-  const kat = req.body.kat;
-  console.log(kat);
-  let sql = "UPDATE otopark SET kat_state = ? WHERE parkName = ?";
-  let sql2 = "UPDATE last_reservation SET state = ? WHERE email = ?";
-  db.query(sql2, [state, email], (err, rows) => {
+  // const kat = req.body.kat;
+  // console.log(kat, state);
+  // let sql = "UPDATE otopark SET kat_state = ? WHERE parkName = ?";
+  let sql2 = "UPDATE last_reservation SET state = ? WHERE id = ?";
+  db.query(sql2, [state, id], (err, rows) => {
     if (err) throw err;
   });
-  db2.query(sql, [kat, parkName], (err, rows) => {
-    if (err) throw err;
-  });
+  // db2.query(sql, [kat, parkName], (err, rows) => {
+  //   if (err) throw err;
+  // });
 });
 
 // ?  port listen listen all finally

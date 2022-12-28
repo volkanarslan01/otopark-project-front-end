@@ -22,6 +22,7 @@ const MakeReservation = () => {
   const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
   const [_kat_state, setkat_state] = useState(0);
+  const [kat_name, setKat_name] = useState("");
 
   // ? items
   const [item, setitem] = useState([]);
@@ -69,12 +70,11 @@ const MakeReservation = () => {
   // ? data placement
   useEffect(() => {
     data.map((data_2) => {
-      setkat_state(data_2.kat_state);
-      setparkName(data_2.parkName);
-      setplace(data_2.place);
-      setpay(data_2.hourly_pay);
-      setstate(data_2.state);
-      setopenHours(data_2.open_hours);
+      if (selected.value === data_2.parkName) {
+        setparkName(data_2.parkName);
+        setplace(data_2.place);
+        setstate(data_2.state);
+      }
     });
     userData.map((userData) => {
       setfirst_name(userData.first_name);
@@ -92,6 +92,15 @@ const MakeReservation = () => {
       if (selected.value === item.parkName)
         return options_2.push(item.kat_name);
     });
+
+    item.map((item) => {
+      if (selected.value === item.parkName) {
+        setopenHours(item.open_hours);
+        setpay(item.hourly_pay);
+        setkat_state(item.kat_state);
+        setKat_name(item.kat_name);
+      }
+    });
   });
 
   // ? update state controller
@@ -99,27 +108,24 @@ const MakeReservation = () => {
   useEffect(() => {
     axios.get("/last").then((res) => {
       setitem_controller(res.data);
-      console.log(res.data);
     });
   }, []);
 
   // ? date later update
-  useEffect(() => {
-    item_controller.map((item) => {
-      if (
-        now.getTime() === item.time_2 ||
-        (now.getTime() < item.time_2 && item.email === _email)
-      ) {
-        const kat = _kat_state + 1;
-        const state = 0;
-        axios.put("/state", {
-          state: state,
-          kat: kat,
-          parkName: item.parkName,
-        });
-      }
-    });
-  });
+  // useEffect(() => {
+  //   item_controller.map((item) => {
+  //     if (now.getTime() > item.time_2) {
+  //       // const kat = _kat_state + 1;
+  //       const state = 0;
+  //       axios.put("/state", {
+  //         id: item.id,
+  //         state: state,
+  //         // kat: kat,
+  //         parkName: item.parkName,
+  //       });
+  //     }
+  //   });
+  // });
 
   // ! data processing
   const onClick = () => {
@@ -154,9 +160,8 @@ const MakeReservation = () => {
           pay = hours * _pay;
         }
         convertMstoTime(result);
-
         axios.post("/lastReservations", {
-          parkName: _parkName,
+          parkName: selected.value,
           place: _place_name,
           time_1: value.getTime(),
           time_2: value_1.getTime(),
@@ -172,7 +177,7 @@ const MakeReservation = () => {
           const kat = _kat_state - 1;
           axios.put("/update", {
             kat_state: kat,
-            park_name: _parkName,
+            park_name: selected.value,
           });
         }
       }
@@ -218,6 +223,18 @@ const MakeReservation = () => {
             placeholder="Select an Kat"
           />
         </div>
+
+        <div className={classes.info}>
+          <label> Otopark Open Hours - Hourly Pay </label>
+          <p className={classes.p}>
+            {openHours} - {_pay} TL
+          </p>
+          <label>Kat - Quato </label>
+          <p>
+            {kat_name} - {_kat_state}
+          </p>
+        </div>
+
         {/* Make reservations */}
         <button className={classes.btn} onClick={onClick}>
           Make
@@ -227,3 +244,10 @@ const MakeReservation = () => {
   );
 };
 export default MakeReservation;
+
+// ? Projede yapilanlar
+// ! Login ve Register Kısmı Tamamlandı Şifreleme Yapıldı.
+// ! Login yapmadan kullanici hiçbişey yapamaz.
+// ? Anasayfada ise saat ve tarih aralıklarını belirtmek için iki tane DateTimePicker ayarladım.
+// * Mysql veri tabanı tasarımı yaptım ve Projemi mysql ile bağladım.
+// * Mysql gelen otopark verilerine göre drop down menüleri doldurdum ve otopark açık olduğu saat ve saatlik ücretini ve anlık durumunu yazdırdım.
