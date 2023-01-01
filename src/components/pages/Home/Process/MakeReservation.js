@@ -251,3 +251,6 @@ export default MakeReservation;
 // ? Anasayfada ise saat ve tarih aralıklarını belirtmek için iki tane DateTimePicker ayarladım.
 // * Mysql veri tabanı tasarımı yaptım ve Projemi mysql ile bağladım.
 // * Mysql gelen otopark verilerine göre drop down menüleri doldurdum ve otopark açık olduğu saat ve saatlik ücretini ve anlık durumunu yazdırdım.
+//! Rezervasyonlarımı gösterdimç
+// ? Google Maps entegre ettim projeme ve Google Maps ile gidiceğim yerin km ve dakikasını ayarladım.
+// ! Verilen Saate göre Ücret hesaplattım.
