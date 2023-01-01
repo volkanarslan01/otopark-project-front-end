@@ -42,19 +42,20 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  // ? otopark get
-  app.get("/otopark", (req, res) => {
-    let sql = "Select * from otopark ";
-    db2.query(sql, (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      res.send(rows);
-    });
+// ? otopark get
+app.get("/otopark", (req, res) => {
+  let sql = "Select * from otopark ";
+  db2.query(sql, (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.send(rows);
   });
-  next();
 });
+// app.use((req, res, next) => {
+
+//   next();
+// });
 
 // ! lastReservation Process
 app.post("/lastReservations", (req, res) => {
