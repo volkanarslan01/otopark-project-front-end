@@ -68,13 +68,24 @@ app.post("/lastReservations", (req, res) => {
   const pay = req.body.pay;
   const state = req.body.state;
   const email = req.body.email;
-
+  const now = req.body.date;
   let sql =
-    "INSERT INTO last_reservation (parkName,place,time_1,firstName,lastName,pay,state,email,time_2) Values (?,?,?,?,?,?,?,?,?)";
+    "INSERT INTO last_reservation (parkName,place,time_1,firstName,lastName,pay,state,email,time_2,nowDatetime) Values (?,?,?,?,?,?,?,?,?,?)";
 
   db.query(
     sql,
-    [parkName, place, time_1, firstName, lastName, pay, state, email, time_2],
+    [
+      parkName,
+      place,
+      time_1,
+      firstName,
+      lastName,
+      pay,
+      state,
+      email,
+      time_2,
+      now,
+    ],
     (err, rows) => {
       if (err) {
         throw err;
@@ -165,10 +176,21 @@ app.post("/login", (req, res) => {
 // ? last get
 
 app.get("/last", (req, res) => {
-  let sql = "Select * from last_reservation where email = ? ";
+  let sql = "SELECT * FROM last_reservation where email = ?";
   db.query(sql, [email], (err, rows) => {
-    if (err) res.send({ error: err });
     res.send(rows);
+  });
+});
+
+app.put("/dateUpdate", (req, res) => {
+  const date = req.body.date;
+  console.log(date);
+  let sql = "UPDATE last_reservation SET nowDatetime = ? where email = ? ";
+  db.query(sql, [date, email], (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
   });
 });
 

@@ -106,8 +106,8 @@ const MakeReservation = () => {
   // ? update state controller
 
   useEffect(() => {
-    axios.get("/last").then((res) => {
-      setitem_controller(res.data);
+    axios.put("/dateUpdate", {
+      date: now.getTime(),
     });
   }, []);
 
@@ -148,6 +148,10 @@ const MakeReservation = () => {
         setMessage("No operation without parking name and floor selected");
         return;
       }
+      if (_kat_state === 0) {
+        setMessage("Parking is now full");
+        return;
+      }
       // ! make reservations portion
       else if (value && value_1 && _email) {
         // ! calculator
@@ -170,10 +174,9 @@ const MakeReservation = () => {
           pay: pay,
           state: _state,
           email: _email,
+          date: now.getTime(),
         });
-        if (_kat_state === 0) {
-          setMessage("Parking is now full");
-        } else if (_email) {
+        if (_email) {
           const kat = _kat_state - 1;
           axios.put("/update", {
             kat_state: kat,
@@ -231,7 +234,7 @@ const MakeReservation = () => {
           </p>
           <label>Kat - Quato </label>
           <p>
-            {kat_name} - {_kat_state}
+            {kat_name} - {_kat_state === 0 ? "Full" : _kat_state}
           </p>
         </div>
 
