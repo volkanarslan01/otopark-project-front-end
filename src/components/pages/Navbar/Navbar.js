@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
@@ -19,7 +18,6 @@ function Navbar() {
   const showNavbar = () => {
     navRef.current.classList.toggle(classes["responsive_nav"]);
   };
-
   return (
     <header className={classes.header}>
       {list.map((item) => {

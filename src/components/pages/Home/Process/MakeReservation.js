@@ -22,8 +22,8 @@ const MakeReservation = () => {
   const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
   const [_kat_state, setkat_state] = useState(0);
+  const [_lastState, setlastState] = useState(false);
   const [kat_name, setKat_name] = useState("");
-
   // ? items
   const [item, setitem] = useState([]);
   const [item_2, setitem_2] = useState([]);
@@ -32,7 +32,8 @@ const MakeReservation = () => {
 
   // ! controller
   const [item_controller, setitem_controller] = useState([]);
-
+  const [parkController, setparkController] = useState([]);
+  const [kat_items, setkat_items] = useState([]);
   // * selected
   const [selected, setselected] = useState("");
   const [selected_2, setselected_2] = useState("");
@@ -112,20 +113,49 @@ const MakeReservation = () => {
   }, []);
 
   // ? date later update
-  // useEffect(() => {
-  //   item_controller.map((item) => {
-  //     if (now.getTime() > item.time_2) {
-  //       // const kat = _kat_state + 1;
-  //       const state = 0;
-  //       axios.put("/state", {
-  //         id: item.id,
-  //         state: state,
-  //         // kat: kat,
-  //         parkName: item.parkName,
-  //       });
-  //     }
-  //   });
-  // });
+  useEffect(() => {
+    axios.get("/last").then((res) => {
+      setitem_controller(res.data);
+    });
+  }, []);
+  useEffect(() => {
+    axios
+      .get("/lastPark")
+      .then((res) => {
+        setparkController(res.data);
+      })
+      .catch((err) => {
+        setMessage(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    parkController.map((item) => setkat_items(item.kat_state));
+  });
+
+  useEffect(() => {
+    item_controller.forEach((item) => {
+      if (item.state === 0) {
+        return;
+      } else if (now.getTime() > item.time_2) {
+        let kat_state = 0;
+        kat_items.forEach((kat) => {
+          if (kat === 0) {
+            return setMessage("Park Full");
+          } else {
+            console.log(kat);
+            kat_state = kat + 1;
+          }
+        });
+        let state = 0;
+        axios.put("update_state", {
+          parkName: item.parkName,
+          state: state,
+          kat_state: kat_state,
+        });
+      }
+    });
+  });
 
   // ! data processing
   const onClick = () => {

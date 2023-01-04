@@ -1,4 +1,5 @@
 import classes from "../Login/Login.module.scss";
+import Navbar from "../Navbar/Navbar.js";
 import { useEffect, useState } from "react";
 import Axios from "../../../Api/axios.js";
 
@@ -15,11 +16,17 @@ export default function Login() {
   });
 
   const [err, setError] = useState("");
+  const [logState, setLogState] = useState(false);
+
   const onClick = (values) => {
     try {
       Axios.post("/login", {
         email: values.email,
         password: values.password,
+      }).then((response) => {
+        if (response.status === 200) {
+          setLogState(true);
+        }
       });
     } catch (error) {
       setError(error);
