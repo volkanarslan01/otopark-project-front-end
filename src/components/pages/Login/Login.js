@@ -6,6 +6,7 @@ import Axios from "../../../Api/axios.js";
 import { Formik, Form } from "formik";
 import { TextField } from "./TextField";
 import * as Yup from "yup";
+import { LayoutGroupContext } from "framer-motion";
 
 export default function Login() {
   const validate = Yup.object({
@@ -25,7 +26,7 @@ export default function Login() {
         password: values.password,
       }).then((response) => {
         if (response.status === 200) {
-          setLogState(true);
+          window.location.reload();
         }
       });
     } catch (error) {
@@ -60,31 +61,3 @@ export default function Login() {
     </Formik>
   );
 }
-
-// ? jwt token
-
-// const [loginStatus, setLoginStatus] = useState(false);
-// Axios.defaults.withCredentials = true;
-// const login = () => {
-//   Axios.post("/login", {
-//     username: username,
-//     password: password,
-//   }).then((response) => {
-//     if (!response.data.auth) {
-//       setLoginStatus(false);
-//     } else {
-//       localStorage.setItem("token", response.data.token);
-//       setLoginStatus(true);
-//     }
-//   });
-// };
-
-// const userAuthenticated = () => {
-//   Axios.get("/isUserAuth", {
-//     headers: {
-//       "x-access-token": localStorage.getItem("token"),
-//     },
-//   }).then((response) => {
-//     console.log(response);
-//   });
-// };

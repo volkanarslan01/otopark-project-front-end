@@ -7,7 +7,7 @@ import axios from "../../../Api/axios.js";
 function Navbar() {
   const [list, setList] = useState([]);
   try {
-    axios.get("/header").then((res) => {
+    axios.get("/users").then((res) => {
       setList(res.data);
     });
   } catch (err) {

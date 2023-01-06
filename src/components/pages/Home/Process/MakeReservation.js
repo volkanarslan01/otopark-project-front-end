@@ -34,6 +34,7 @@ const MakeReservation = () => {
   const [item_controller, setitem_controller] = useState([]);
   const [parkController, setparkController] = useState([]);
   const [kat_items, setkat_items] = useState([]);
+
   // * selected
   const [selected, setselected] = useState("");
   const [selected_2, setselected_2] = useState("");
@@ -130,28 +131,24 @@ const MakeReservation = () => {
   }, []);
 
   useEffect(() => {
-    parkController.map((item) => setkat_items(item.kat_state));
-  });
-
-  useEffect(() => {
     item_controller.forEach((item) => {
       if (item.state === 0) {
         return;
       } else if (now.getTime() > item.time_2) {
-        let kat_state = 0;
-        kat_items.forEach((kat) => {
-          if (kat === 0) {
-            return setMessage("Park Full");
-          } else {
-            console.log(kat);
-            kat_state = kat + 1;
+        parkController.map((kat) => {
+          if (item.parkName === kat.parkName) {
+            if (kat.kat_state === 0) {
+              return setMessage("Park Full");
+            } else {
+              let state = 0;
+              let kat_state = kat.kat_state++;
+              axios.put("update_state", {
+                parkName: item.parkName,
+                state: state,
+                kat_state: kat_state,
+              });
+            }
           }
-        });
-        let state = 0;
-        axios.put("update_state", {
-          parkName: item.parkName,
-          state: state,
-          kat_state: kat_state,
         });
       }
     });
@@ -194,25 +191,31 @@ const MakeReservation = () => {
           pay = hours * _pay;
         }
         convertMstoTime(result);
-        axios.post("/lastReservations", {
-          parkName: selected.value,
-          place: _place_name,
-          time_1: value.getTime(),
-          time_2: value_1.getTime(),
-          firstName: _first_name,
-          lastName: _last_name,
-          pay: pay,
-          state: _state,
-          email: _email,
-          date: now.getTime(),
-        });
-        if (_email) {
-          const kat = _kat_state - 1;
-          axios.put("/update", {
-            kat_state: kat,
-            park_name: selected.value,
+        axios
+          .post("/lastReservations", {
+            parkName: selected.value,
+            place: _place_name,
+            time_1: value.getTime(),
+            time_2: value_1.getTime(),
+            firstName: _first_name,
+            lastName: _last_name,
+            pay: pay,
+            state: _state,
+            email: _email,
+            date: now.getTime(),
+          })
+          .then((response) => {
+            if (response) {
+              if (_email) {
+                const kat = _kat_state - 1;
+                axios.put("/update", {
+                  kat_state: kat,
+                  park_name: selected.value,
+                });
+              }
+              window.location.reload();
+            }
           });
-        }
       }
     } catch (err) {
       setMessage(err);
