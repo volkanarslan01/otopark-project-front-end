@@ -36,6 +36,9 @@ const LastReservation = () => {
       }
     });
     try {
+      if (now.getTime() > time) {
+        return setMessage("There`s no cancellation in the last hour");
+      }
       axios({
         method: "DELETE",
         url: "http://localhost:3004/cancel",
@@ -71,7 +74,7 @@ const LastReservation = () => {
         const date_2 = new Date(time_2);
         return (
           <div className={classes.box}>
-            {message ? <h4>{message}</h4> : null}
+            {message ? <h4 className={classes.h4}>{message}</h4> : null}
             <label>Park Name</label>
             <h2>{parkName}</h2>
             <label>Place</label>

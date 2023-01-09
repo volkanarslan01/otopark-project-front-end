@@ -36,9 +36,7 @@ export default function Register() {
           email: values.email,
           password: values.password,
         },
-        (err) => {
-          setError(err);
-        }
+        window.location.reload()
       );
     } catch (error) {
       setError(error);

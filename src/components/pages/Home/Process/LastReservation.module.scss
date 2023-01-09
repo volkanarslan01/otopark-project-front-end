@@ -25,3 +25,40 @@ h5 {
 .btn:disabled {
   background-color: #333;
 }
+.h4 {
+  font-size: 18px;
+  color: #f00;
+  font-weight: bold;
+}
+.title {
+  font-size: 22px;
+  margin: 20px;
+  font-weight: bold;
+}
+.feedBoxes {
+  display: flex;
+  justify-content: center;
+}
+.feedBox {
+  width: 100%;
+  text-align: center;
+  border: 1px solid rgba(51, 51, 51, 0.099);
+  padding: 100px;
+  margin: 10px;
+}
+.feedInput {
+  width: 75%;
+  border: 1px solid #195119;
+  text-align: center;
+  padding: 4px;
+  border-radius: 5px;
+}
+.feedButton {
+  border: 1px solid #008000;
+  border-radius: 15px;
+  width: 100px;
+  padding: 5px;
+  margin: 5px 50px 0 50px;
+  background-color: #1f7b1f;
+  color: #fff;
+}

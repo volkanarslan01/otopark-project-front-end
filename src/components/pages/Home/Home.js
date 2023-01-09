@@ -2,6 +2,7 @@ import classes from "./Home.module.scss";
 import { useState, useEffect } from "react";
 import LastReservations from "./Process/LastReservations.js";
 import MakeReservations from "./Process/MakeReservation.js";
+import Feedback from "./Process/Feedback.js";
 export default function Home() {
   return (
     <>
@@ -17,6 +18,10 @@ export default function Home() {
         <div className={classes.footerin}>
           <LastReservations />
         </div>
+      </div>
+
+      <div>
+        <Feedback />
       </div>
     </>
   );
