@@ -13,3 +13,15 @@ hr {
 h5 {
   color: #008000;
 }
+.btn {
+  margin: 10px 0 10px 0;
+  width: 100px;
+  padding: 5px;
+  color: #fff;
+  border-radius: 15px;
+  background-color: rgb(186, 36, 36);
+  transition: 1s all;
+}
+.btn:disabled {
+  background-color: #333;
+}

@@ -6,6 +6,7 @@ import classes from "../Process/LastReservation.module.scss";
 const LastReservation = () => {
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
+  const [parkList, setParkList] = useState([]);
   useEffect(() => {
     try {
       axios.get("/last").then((response) => {
@@ -15,11 +16,46 @@ const LastReservation = () => {
       setMessage(err);
     }
   }, []);
+  useEffect(() => {
+    try {
+      axios.get("/lastPark").then((response) => {
+        setParkList(response.data);
+      });
+    } catch (err) {
+      setMessage(err);
+    }
+  }, []);
+
+  const onCancelSumbit = (id, parkName, time_2) => {
+    let now = new Date();
+    let time = time_2 - 3600000;
+    let _kat_state;
+    parkList.map((park) => {
+      if (park.parkName === parkName) {
+        return (_kat_state = park.kat_state + 1);
+      }
+    });
+    try {
+      axios({
+        method: "DELETE",
+        url: "http://localhost:3004/cancel",
+        data: {
+          id: id,
+          parkName: parkName,
+          kat_state: _kat_state,
+        },
+      });
+      window.location.reload();
+    } catch (err) {
+      setMessage(err);
+    }
+  };
 
   return (
     <>
       {list.map((item) => {
         const {
+          id,
           parkName,
           place,
           time_1,
@@ -30,6 +66,7 @@ const LastReservation = () => {
           state,
           email,
         } = item;
+
         const date = new Date(time_1);
         const date_2 = new Date(time_2);
         return (
@@ -51,6 +88,20 @@ const LastReservation = () => {
             <h6>{email}</h6>
             <label>State</label>
             <h5>{state ? "Gerçekleşmedi" : "Gerçekleşti"}</h5>
+            {state ? (
+              <button
+                onClick={() => {
+                  onCancelSumbit(id, parkName, time_2);
+                }}
+                className={classes.btn}
+              >
+                Iptal
+              </button>
+            ) : (
+              <button className={classes.btn} disabled={true}>
+                Iptal
+              </button>
+            )}
             <hr />
           </div>
         );
