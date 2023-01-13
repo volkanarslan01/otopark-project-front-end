@@ -3,7 +3,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
 import axios from "../../../Api/axios.js";
-
+import Login from "../Login/Login";
 function Navbar() {
   const [list, setList] = useState([]);
   try {
@@ -29,10 +29,13 @@ function Navbar() {
       })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
+        <Link className={classes.login} to="/login">
+          Login
+        </Link>
+        <Link  className={classes.register} to="/register">
+          Register
+        </Link>
         <Link to="/about">Maps</Link>
-
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}
           onClick={showNavbar}

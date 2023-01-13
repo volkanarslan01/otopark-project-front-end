@@ -33,7 +33,6 @@ const MakeReservation = () => {
   // ! controller
   const [item_controller, setitem_controller] = useState([]);
   const [parkController, setparkController] = useState([]);
-  const [kat_items, setkat_items] = useState([]);
 
   // * selected
   const [selected, setselected] = useState("");
@@ -104,14 +103,6 @@ const MakeReservation = () => {
       }
     });
   });
-
-  // ? update state controller
-
-  useEffect(() => {
-    axios.put("/dateUpdate", {
-      date: now.getTime(),
-    });
-  }, []);
 
   // ? date later update
   useEffect(() => {
@@ -280,13 +271,3 @@ const MakeReservation = () => {
   );
 };
 export default MakeReservation;
-
-// ? Projede yapilanlar
-// ! Login ve Register Kısmı Tamamlandı Şifreleme Yapıldı.
-// ! Login yapmadan kullanici hiçbişey yapamaz.
-// ? Anasayfada ise saat ve tarih aralıklarını belirtmek için iki tane DateTimePicker ayarladım.
-// * Mysql veri tabanı tasarımı yaptım ve Projemi mysql ile bağladım.
-// * Mysql gelen otopark verilerine göre drop down menüleri doldurdum ve otopark açık olduğu saat ve saatlik ücretini ve anlık durumunu yazdırdım.
-//! Rezervasyonlarımı gösterdimç
-// ? Google Maps entegre ettim projeme ve Google Maps ile gidiceğim yerin km ve dakikasını ayarladım.
-// ! Verilen Saate göre Ücret hesaplattım.

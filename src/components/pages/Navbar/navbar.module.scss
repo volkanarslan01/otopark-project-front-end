@@ -57,6 +57,7 @@
   color: var(--textColor);
   padding: 0 10px 0 10px;
 }
+
 ul {
   display: flex;
 }
@@ -78,6 +79,7 @@ ul {
   }
 
   .header nav {
+    z-index: 2;
     position: fixed;
     top: 0;
     left: 0;
@@ -106,4 +108,7 @@ ul {
   .nav a {
     font-size: 1.5rem;
   }
+}
+.register::active {
+  visibility: hidden; 
 }

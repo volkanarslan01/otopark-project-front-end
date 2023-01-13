@@ -1,12 +1,10 @@
 import classes from "../Login/Login.module.scss";
-import Navbar from "../Navbar/Navbar.js";
 import { useEffect, useState } from "react";
 import Axios from "../../../Api/axios.js";
 
 import { Formik, Form } from "formik";
 import { TextField } from "./TextField";
 import * as Yup from "yup";
-import { LayoutGroupContext } from "framer-motion";
 
 export default function Login() {
   const validate = Yup.object({
@@ -18,17 +16,31 @@ export default function Login() {
 
   const [err, setError] = useState("");
   const [logState, setLogState] = useState(false);
+  const [messages, setMessages] = useState("");
 
   const onClick = (values) => {
     try {
       Axios.post("/login", {
         email: values.email,
         password: values.password,
-      }).then((response) => {
-        if (response.status === 200) {
-          window.location.reload();
-        }
-      });
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            setMessages("entry successful");
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            setMessages("entry failed");
+            
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        });
     } catch (error) {
       setError(error);
     }
@@ -55,6 +67,7 @@ export default function Login() {
               Reset
             </button>
             {err ? <h4 className={classes.error}>{err}</h4> : null}
+            {messages ? <h4 className={classes.messages}>{messages}</h4> : null}
           </Form>
         </div>
       )}
