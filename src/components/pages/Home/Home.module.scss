@@ -11,24 +11,23 @@ ul {
   justify-content: center;
 }
 .container {
+  position: relative;
   text-align: center;
-  width: 100%;
-  display: flex;
-  justify-content: center;
 }
 
 .dateNow {
+  color: rgb(196, 190, 190);
   margin: 10px;
 }
 .box {
   margin: 50px;
 }
+
 .date {
   align-items: center;
 }
 .process {
   margin: 50px 0 0 0;
-  width: 100%;
   display: flex;
   justify-content: center;
   & p {
@@ -59,7 +58,9 @@ ul {
   border-radius: 10px;
   border: none;
 }
-
+.date {
+  color: #fff;
+}
 .dropdown {
   width: 200px;
   margin: 50px 10px;
@@ -68,8 +69,25 @@ ul {
   margin: 10px;
 }
 .info {
-  margin: 20px 0;
-  padding: 10px;
+  margin: 20px 100px;
+  padding: 30px;
   border-radius: 5px;
-  border: 1px solid rgba(158, 157, 157, 0.236);
+  border: 1px solid rgba(19, 17, 17, 0.236);
+}
+.img {
+  width: 100%;
+  min-height: 50%;
+  object-fit: cover;
+}
+.makeBox {
+  padding: 50px;
+  border-radius: 50px;
+  background-color: #fff;
+  opacity: 0.8;
+  color: #333;
+  position: absolute;
+  left: 25%;
+  bottom: 50%;
+  display: flex;
+  align-items: center;
 }

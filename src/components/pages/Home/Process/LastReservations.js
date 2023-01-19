@@ -18,7 +18,7 @@ const LastReservation = () => {
   }, []);
   useEffect(() => {
     try {
-      axios.get("/lastPark").then((response) => {
+      axios.get("/otopark").then((response) => {
         setParkList(response.data);
       });
     } catch (err) {

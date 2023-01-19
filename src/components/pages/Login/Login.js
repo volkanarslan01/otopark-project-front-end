@@ -1,10 +1,11 @@
 import classes from "../Login/Login.module.scss";
 import { useEffect, useState } from "react";
 import Axios from "../../../Api/axios.js";
-
 import { Formik, Form } from "formik";
 import { TextField } from "./TextField";
 import * as Yup from "yup";
+import { Route, Routes } from "react-router-dom";
+import Home from "../Home/Home";
 
 export default function Login() {
   const validate = Yup.object({
@@ -25,8 +26,15 @@ export default function Login() {
         password: values.password,
       })
         .then((response) => {
-          if (response.status === 200) {
-            setMessages("entry successful");
+          if (response.data.message === "Succesful") {
+            setMessages(response.data.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else if (
+            response.data.message === "email and password combination does not"
+          ) {
+            setMessages(response.data.message);
             setTimeout(() => {
               window.location.reload();
             }, 2000);
@@ -34,8 +42,6 @@ export default function Login() {
         })
         .catch((err) => {
           if (err) {
-            setMessages("entry failed");
-            
             setTimeout(() => {
               window.location.reload();
             }, 2000);
@@ -67,7 +73,7 @@ export default function Login() {
               Reset
             </button>
             {err ? <h4 className={classes.error}>{err}</h4> : null}
-            {messages ? <h4 className={classes.messages}>{messages}</h4> : null}
+            {messages ? <h4 className={classes.message}>{messages}</h4> : null}
           </Form>
         </div>
       )}

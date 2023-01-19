@@ -109,6 +109,10 @@ ul {
     font-size: 1.5rem;
   }
 }
+
+.login::active {
+  visibility: hidden;
+}
 .register::active {
-  visibility: hidden; 
+  visibility: hidden;
 }

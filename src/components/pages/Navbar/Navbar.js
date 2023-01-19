@@ -3,15 +3,20 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
 import axios from "../../../Api/axios.js";
-import Login from "../Login/Login";
 function Navbar() {
+  const [state, setState] = useState(false);
   const [list, setList] = useState([]);
   try {
-    axios.get("/users").then((res) => {
-      setList(res.data);
-    });
+    axios
+      .get("/users")
+      .then((res) => {
+        setList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } catch (err) {
-    throw new Error();
+    console.log(err);
   }
   const navRef = useRef();
 
@@ -29,10 +34,10 @@ function Navbar() {
       })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link className={classes.login} to="/login">
+        <Link to="/login" hidden={state}>
           Login
         </Link>
-        <Link  className={classes.register} to="/register">
+        <Link to="/register" hidden={state}>
           Register
         </Link>
         <Link to="/about">Maps</Link>

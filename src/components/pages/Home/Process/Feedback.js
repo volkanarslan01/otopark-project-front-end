@@ -10,40 +10,51 @@ const Feedback = () => {
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [list, setList] = useState([]);
+
   useEffect(() => {
-    axios.get("/users").then((res) => {
-      setList(res.data);
-    });
+    try {
+      axios.get("/users").then((res) => {
+        setList(res.data);
+      });
+    } catch (e) {
+      setMessage(e);
+    }
   }, []);
+
   useEffect(() => {
-    list.map((res) => {
-      setEmail(res.email);
-      setName(res.first_name);
-      setSurname(res.last_name);
+    list.forEach((data) => {
+      setEmail(data.email);
+      setName(data.first_name);
+      setSurname(data.last_name);
     });
   });
+
   const onChangeSumbit = () => {
-    if (email == "") {
+    if (email === "") {
       return setMessage("Please enter user");
-    } else if (feedback == "") {
+    } else if (feedback === "") {
       return setMessage("Please enter feedback");
     } else {
-      axios
-        .post("/feedback", {
-          name: name,
-          surname: surname,
-          email: email,
-          feedback: feedback,
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            setMessage("Thanks for the feedback");
-            setTimeout(() => {
-              setMessage("");
-              setFeedback("");
-            }, 2000);
-          }
-        });
+      try {
+        axios
+          .post("/feedback", {
+            name: name,
+            surname: surname,
+            email: email,
+            feedback: feedback,
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              setMessage("Thanks for the feedback");
+              setTimeout(() => {
+                setMessage("");
+                setFeedback("");
+              }, 2000);
+            }
+          });
+      } catch (e) {
+        setMessage(e);
+      }
     }
   };
   return (

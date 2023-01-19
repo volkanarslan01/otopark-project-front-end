@@ -61,10 +61,12 @@ const MakeReservation = () => {
     axios
       .get("/users")
       .then((res) => {
-        setUserData(res.data);
+        if (res.status === 200) {
+          return setUserData(res.data);
+        }
       })
       .catch((err) => {
-        return err;
+        setMessage(err);
       });
   }, []);
 
@@ -112,7 +114,7 @@ const MakeReservation = () => {
   }, []);
   useEffect(() => {
     axios
-      .get("/lastPark")
+      .get("/last")
       .then((res) => {
         setparkController(res.data);
       })
@@ -221,36 +223,38 @@ const MakeReservation = () => {
     <>
       {/* DateTime  */}
       <h4 className={classes.h4}>{message}</h4>
-      <div className={classes.date}>
-        <DateTimePicker
-          className={classes.dateNow}
-          onChange={onChange}
-          value={value}
-        />
-        <DateTimePicker
-          className={classes.dateNow}
-          onChange={onChanged}
-          value={value_1}
-        />
 
-        {/*!! Drop Down */}
-        <div className={classes.process}>
-          <Dropdown
-            className={classes.dropdown}
-            options={options}
-            onChange={setselected}
-            value={defaultOption}
-            placeholder="Select an Park"
+      <div className={classes.makeBox}>
+        <div className={classes.date}>
+          <DateTimePicker
+            className={classes.dateNow}
+            onChange={onChange}
+            value={value}
           />
-          <Dropdown
-            className={classes.dropdown}
-            onChange={setselected_2}
-            options={options_2}
-            value={defaultOption_2}
-            placeholder="Select an Kat"
+          <DateTimePicker
+            className={classes.dateNow}
+            onChange={onChanged}
+            value={value_1}
           />
+
+          {/*!! Drop Down */}
+          <div className={classes.process}>
+            <Dropdown
+              className={classes.dropdown}
+              options={options}
+              onChange={setselected}
+              value={defaultOption}
+              placeholder="Select an Park"
+            />
+            <Dropdown
+              className={classes.dropdown}
+              onChange={setselected_2}
+              options={options_2}
+              value={defaultOption_2}
+              placeholder="Select an Kat"
+            />
+          </div>
         </div>
-
         <div className={classes.info}>
           <label> Otopark Open Hours - Hourly Pay </label>
           <p className={classes.p}>
@@ -261,12 +265,12 @@ const MakeReservation = () => {
             {kat_name} - {_kat_state === 0 ? "Full" : _kat_state}
           </p>
         </div>
-
-        {/* Make reservations */}
-        <button className={classes.btn} onClick={onClick}>
-          Make
-        </button>
       </div>
+
+      {/* Make reservations */}
+      <button className={classes.btn} onClick={onClick}>
+        Make
+      </button>
     </>
   );
 };
