@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "../../../../Api/axios";
-
-import classes from "../Process/LastReservation.module.scss";
-
+import axios from "../../../../../Api/axios";
+import classes from "./LastReservation.module.scss";
 const LastReservation = () => {
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
@@ -16,6 +14,7 @@ const LastReservation = () => {
       setMessage(err);
     }
   }, []);
+  // !  otopark data get
   useEffect(() => {
     try {
       axios.get("/otopark").then((response) => {
@@ -114,5 +113,3 @@ const LastReservation = () => {
   );
 };
 export default LastReservation;
-
-// ? database username kismi eklenecek ve bununla reservation yapilacak.

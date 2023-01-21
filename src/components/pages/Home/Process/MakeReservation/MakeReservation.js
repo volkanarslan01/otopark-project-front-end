@@ -1,8 +1,8 @@
-import classes from "../../Home/Home.module.scss";
+import classes from "./MakeReservation.module.scss";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useState, useEffect } from "react";
-import axios from "../../../../Api/axios";
+import axios from "../../../../../Api/axios";
 import DateTimePicker from "react-datetime-picker";
 const MakeReservation = () => {
   // ? message
@@ -223,9 +223,8 @@ const MakeReservation = () => {
     <>
       {/* DateTime  */}
       <h4 className={classes.h4}>{message}</h4>
-
-      <div className={classes.makeBox}>
-        <div className={classes.date}>
+      <div className={classes.main}>
+        <div className={classes.date_box}>
           <DateTimePicker
             className={classes.dateNow}
             onChange={onChange}
@@ -236,24 +235,23 @@ const MakeReservation = () => {
             onChange={onChanged}
             value={value_1}
           />
+        </div>
 
-          {/*!! Drop Down */}
-          <div className={classes.process}>
-            <Dropdown
-              className={classes.dropdown}
-              options={options}
-              onChange={setselected}
-              value={defaultOption}
-              placeholder="Select an Park"
-            />
-            <Dropdown
-              className={classes.dropdown}
-              onChange={setselected_2}
-              options={options_2}
-              value={defaultOption_2}
-              placeholder="Select an Kat"
-            />
-          </div>
+        <div className={classes.drop_box}>
+          <Dropdown
+            className={classes.dropdown}
+            options={options}
+            onChange={setselected}
+            value={defaultOption}
+            placeholder="Select an Park"
+          />
+          <Dropdown
+            className={classes.dropdown}
+            onChange={setselected_2}
+            options={options_2}
+            value={defaultOption_2}
+            placeholder="Select an Kat"
+          />
         </div>
         <div className={classes.info}>
           <label> Otopark Open Hours - Hourly Pay </label>
@@ -264,13 +262,13 @@ const MakeReservation = () => {
           <p>
             {kat_name} - {_kat_state === 0 ? "Full" : _kat_state}
           </p>
+
+          {/* Make reservations */}
+          <button className={classes.btn} onClick={onClick}>
+            Make
+          </button>
         </div>
       </div>
-
-      {/* Make reservations */}
-      <button className={classes.btn} onClick={onClick}>
-        Make
-      </button>
     </>
   );
 };

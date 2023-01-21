@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "../../../../Api/axios";
+import axios from "../../../../../Api/axios";
 
-import classes from "../Process/LastReservation.module.scss";
+// import classes from "../Process/LastReservation.module.scss";
 
+import classes from "./FeedBack.module.scss";
 const Feedback = () => {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
