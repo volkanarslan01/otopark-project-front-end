@@ -78,9 +78,58 @@
 //   align-items: center;
 // }
 
-
+.h3 {
+  margin: 10px;
+  text-align: center;
+  font-size: 25px;
+}
 .main {
+  padding: 100px;
+  border-radius: 200px;
+  border: 1px solid rgb(207, 203, 203);
+  align-items: center;
   display: flex;
   justify-content: center;
-}
 
+  .date_box {
+    .dateNow {
+      color: #008000;
+      margin: 0 10px 0 0;
+    }
+  }
+  .drop_box {
+    margin: 0 10px 0 10px;
+  }
+  .dropdown {
+    display: inline-block;
+    margin: 0 10px 0 0;
+  }
+  .info {
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgb(232, 232, 232);
+    margin: 0 0 0 20px;
+    .h3 {
+      font-size: 25 px;
+    }
+    .fa_info {
+      font-size: 25px;
+      display: inline-block;
+      color: rgb(12, 89, 204);
+    }
+    .btn {
+      margin: 10px 0 0 0;
+      width: 100px;
+      border-radius: 20px;
+      padding: 10px;
+      color: #fff;
+      background-color: #1f7b1f;
+    }
+  }
+  .message {
+    color: #ff0000;
+  }
+}
+.box_card {
+  display: flex;
+}

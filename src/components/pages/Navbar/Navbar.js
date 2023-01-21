@@ -34,13 +34,10 @@ function Navbar() {
       })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link to="/login" hidden={state}>
-          Login
-        </Link>
-        <Link to="/register" hidden={state}>
-          Register
-        </Link>
+        <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
         <Link to="/about">Maps</Link>
+        <Link to="/reservations">Reservations</Link>
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}
           onClick={showNavbar}
@@ -56,12 +53,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-// function CustomLink({ to, children }) {
-//   const path = window.location.pathname;
-//   return (
-//     <li className={path === to ? "active" : ""}>
-//       <Link to={to}>{children}</Link>
-//     </li>
-//   );
-// }

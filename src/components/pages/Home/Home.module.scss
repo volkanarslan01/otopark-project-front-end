@@ -18,12 +18,29 @@
   }
   .faPay {
     text-align: center;
-    font-size: 30px;
+    font-size: 50px;
+    margin-left: 25px;
+    // padding-left: 10px;
+  }
+  .faFax {
+    text-align: center;
+    font-size: 50px;
+    margin-left: 50px;
+    // padding-left: 10px;
   }
 }
 
 .carousel {
   padding: 50px;
+  display: flex;
+  justify-content: center;
+}
+.h3 {
+  text-align: center;
+  font-size: 25px;
+  margin: 20px 0;
+}
+.box_card {
   display: flex;
   justify-content: center;
 }

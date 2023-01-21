@@ -4,6 +4,7 @@ import "react-dropdown/style.css";
 import { useState, useEffect } from "react";
 import axios from "../../../../../Api/axios";
 import DateTimePicker from "react-datetime-picker";
+import { FaInfo } from "react-icons/fa";
 const MakeReservation = () => {
   // ? message
   const [message, setMessage] = useState("");
@@ -198,15 +199,18 @@ const MakeReservation = () => {
             date: now.getTime(),
           })
           .then((response) => {
-            if (response) {
+            if (response.status === 200) {
               if (_email) {
                 const kat = _kat_state - 1;
                 axios.put("/update", {
                   kat_state: kat,
                   park_name: selected.value,
                 });
+                setMessage("Reservation Made");
               }
-              window.location.reload();
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             }
           });
       }
@@ -221,16 +225,17 @@ const MakeReservation = () => {
 
   return (
     <>
-      {/* DateTime  */}
-      <h4 className={classes.h4}>{message}</h4>
+      <h3 className={classes.h3}>Booking Transactions</h3>
       <div className={classes.main}>
         <div className={classes.date_box}>
           <DateTimePicker
+            disableClock={true}
             className={classes.dateNow}
             onChange={onChange}
             value={value}
           />
           <DateTimePicker
+            disableClock={true}
             className={classes.dateNow}
             onChange={onChanged}
             value={value_1}
@@ -254,10 +259,13 @@ const MakeReservation = () => {
           />
         </div>
         <div className={classes.info}>
-          <label> Otopark Open Hours - Hourly Pay </label>
-          <p className={classes.p}>
-            {openHours} - {_pay} TL
+          <p className={classes.h3}>
+            <FaInfo className={classes.fa_info} /> Selected Park Info
           </p>
+          <label> Otopark Open Hours </label>
+          <p className={classes.p}>{openHours}</p>
+          <label>Hourly Pay</label>
+          <p className={classes.p}>{_pay} TL</p>
           <label>Kat - Quato </label>
           <p>
             {kat_name} - {_kat_state === 0 ? "Full" : _kat_state}
@@ -267,6 +275,8 @@ const MakeReservation = () => {
           <button className={classes.btn} onClick={onClick}>
             Make
           </button>
+
+          <h4 className={classes.message}>{message}</h4>
         </div>
       </div>
     </>
