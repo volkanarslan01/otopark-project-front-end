@@ -1,6 +1,51 @@
-.box {
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  .img {
+    width: 25%;
+  }
+}
+.box {
+  color: #096509;
+  display: flex;
+  justify-content: space-between;
   margin: 10px;
   border: 1px solid rgba(193, 191, 191, 0.893);
+  padding: 50px;
+  .faPark {
+    color: #0000b3;
+  }
+  .faMap {
+    color: #cc0000;
+  }
+  .faClock {
+    color: rgb(95, 93, 93);
+  }
+  .faInfo {
+    color: #3385ff;
+  }
+  .faGoogle {
+    margin: 10px 0 0 0;
+    color: #ff8000;
+  }
+  .faCard {
+    color: #e69d00;
+  }
+  .faTimes {
+    color: #ff0000;
+  }
+  .FaCheck {
+    color: #119411;
+  }
+}
+
+.label {
+  padding: 5px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+.err {
+  font-size: 30px;
+  text-align: center;
 }

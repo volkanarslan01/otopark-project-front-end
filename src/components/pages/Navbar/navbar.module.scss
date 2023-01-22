@@ -8,11 +8,14 @@
 }
 
 :root {
-  --mainColor: #111114;
+  --mainColor: #3a8d2d;
   --textColor: #eee;
 }
 
 .header {
+  font-weight: 500;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
