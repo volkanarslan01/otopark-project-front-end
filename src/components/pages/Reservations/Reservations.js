@@ -20,9 +20,7 @@ const LastReservation = () => {
   useEffect(() => {
     try {
       axios.get("/last").then((response) => {
-        if (response.status === 200) {
-          setList(response.data);
-        }
+        setList(response.data);
       });
     } catch (err) {
       setMessage(err);
@@ -35,7 +33,7 @@ const LastReservation = () => {
         setParkList(response.data);
       });
     } catch (err) {
-      // setMessage(err);
+      setMessage(err);
     }
   }, []);
 
@@ -83,7 +81,7 @@ const LastReservation = () => {
           <img src={Image} className={classes.img} />
         </div>
         <div className={classes.header}></div>
-        {!list == [] ? (
+        {list[0] ? (
           list.map((item) => {
             const {
               id,
