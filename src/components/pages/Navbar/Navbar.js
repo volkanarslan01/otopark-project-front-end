@@ -34,10 +34,16 @@ function Navbar() {
       })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
+        <Link to="/login" className={list[0] ? classes.hidden : null}>
+          Login
+        </Link>
+        <Link to="/register" className={list[0] ? classes.hidden : null}>
+          Register
+        </Link>
         <Link to="/about">Maps</Link>
-        <Link to="/reservations">Reservations</Link>
+        <Link to="/reservations" className={list[0] ? null : classes.hidden}>
+          Reservations
+        </Link>
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}
           onClick={showNavbar}

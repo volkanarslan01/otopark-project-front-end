@@ -113,9 +113,6 @@ ul {
   }
 }
 
-.login::active {
-  visibility: hidden;
-}
-.register::active {
+.hidden {
   visibility: hidden;
 }
