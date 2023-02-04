@@ -34,14 +34,14 @@ function Navbar() {
       })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link to="/login" className={list[0] ? classes.hidden : null}>
+        <Link to="/login" hidden={list[0] ? true : false}>
           Login
         </Link>
-        <Link to="/register" className={list[0] ? classes.hidden : null}>
+        <Link to="/register" hidden={list[0] ? true : false}>
           Register
         </Link>
         <Link to="/about">Maps</Link>
-        <Link to="/reservations" className={list[0] ? null : classes.hidden}>
+        <Link to="/reservations" hidden={list[0] ? false : true}>
           Reservations
         </Link>
         <button
