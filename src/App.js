@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 import Navbar from "../src/components/pages/Navbar/Navbar.js";
 import Home from "../src/components/pages/Home/Home.js";
 import Login from "../src/components/pages/Login/Login.js";

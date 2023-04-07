@@ -8,7 +8,6 @@ import { FaInfo } from "react-icons/fa";
 const MakeReservation = () => {
   // ? message
   const [message, setMessage] = useState("");
-
   // ! date state
   const [value, onChange] = useState(new Date());
   const [value_1, onChanged] = useState(new Date());
@@ -19,11 +18,9 @@ const MakeReservation = () => {
   const [_place_name, setplace] = useState("");
   const [_pay, setpay] = useState(0);
   const [_state, setstate] = useState(0);
-  const [_parkName, setparkName] = useState("");
   const [_email, setemail] = useState("");
   const [openHours, setopenHours] = useState("");
   const [_kat_state, setkat_state] = useState(0);
-  const [_lastState, setlastState] = useState(false);
   const [kat_name, setKat_name] = useState("");
   // ? items
   const [item, setitem] = useState([]);
@@ -46,16 +43,11 @@ const MakeReservation = () => {
 
   // ? get data
   useEffect(() => {
-    axios
-      .get("/otopark")
-      .then((res) => {
-        setData(res.data);
-        setitem(res.data);
-        setitem_2(res.data);
-      })
-      .catch((err) => {
-        return err;
-      });
+    axios.get("/otopark").then((res) => {
+      setData(res.data);
+      setitem(res.data);
+      setitem_2(res.data);
+    });
   }, []);
 
   useEffect(() => {
@@ -75,7 +67,6 @@ const MakeReservation = () => {
   useEffect(() => {
     data.map((data_2) => {
       if (selected.value === data_2.parkName) {
-        setparkName(data_2.parkName);
         setplace(data_2.place);
         setstate(data_2.state);
       }

@@ -4,9 +4,10 @@ import { TextField } from "./TextField";
 import * as Yup from "yup";
 import classes from "./Register.module.scss";
 import Axios from "../../../Api/axios";
+import { useNavigate } from "react-router-dom";
 export default function Register() {
   const [err, setError] = useState("");
-
+  const navigate = useNavigate();
   const validate = Yup.object({
     firstName: Yup.string()
       .max(15, "Must be 15 characters or less")
@@ -25,19 +26,16 @@ export default function Register() {
       .max(20, "Must be 20 characters or less")
       .required("Required"),
   });
-  const onSubmitButton = (values) => {
+  const onSubmitButton = async (values) => {
     try {
-      Axios.post(
-        "/register",
-        {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          plate: values.plate,
-          email: values.email,
-          password: values.password,
-        },
-        window.location.reload()
-      );
+      await Axios.post("/register", {
+        name: values.firstName,
+        surname: values.lastName,
+        plate: values.plate,
+        email: values.email,
+        password: values.password,
+      });
+      navigate("/login");
     } catch (error) {
       setError(error);
     }

@@ -13,13 +13,13 @@ import {
   FaCheck,
   FaTimes,
 } from "react-icons/fa";
-const LastReservation = () => {
+const Reservations = () => {
   const [message, setMessage] = useState(false);
   const [list, setList] = useState([]);
   const [parkList, setParkList] = useState([]);
   useEffect(() => {
     try {
-      axios.get("/last").then((response) => {
+       axios.get("/last").then((response) => {
         setList(response.data);
       });
     } catch (err) {
@@ -177,15 +177,4 @@ const LastReservation = () => {
     </>
   );
 };
-export default LastReservation;
-
-/* 
-<div className={classes.box}>
-              {message ? <h4 className={classes.h4}>{message}</h4> : null}
-              
-              <hr />
-            </div>
-
-
-
-*/
+export default Reservations;

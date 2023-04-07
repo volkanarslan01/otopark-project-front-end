@@ -1,49 +1,38 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
-import axios from "../../../Api/axios.js";
-function Navbar() {
-  const [state, setState] = useState(false);
-  const [list, setList] = useState([]);
-  try {
-    axios
-      .get("/users")
-      .then((res) => {
-        setList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } catch (err) {
-    console.log(err);
-  }
-  const navRef = useRef();
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
+function Navbar() {
+  const [cookies, setCookies] = useCookies(["access_token"]);
+  const navigate = useNavigate();
+  const logout = () => {
+    setCookies("access_token", "");
+    window.localStorage.removeItem("userID");
+    navigate("/auth");
+  };
+  const navRef = useRef();
   const showNavbar = () => {
     navRef.current.classList.toggle(classes["responsive_nav"]);
   };
   return (
     <header className={classes.header}>
-      {list.map((item) => {
-        return (
-          <h6>
-            {item.first_name} {item.last_name}
-          </h6>
-        );
-      })}
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
-        <Link to="/login" hidden={list[0] ? true : false}>
-          Login
-        </Link>
-        <Link to="/register" hidden={list[0] ? true : false}>
-          Register
-        </Link>
+        {!cookies.access_token ? (
+          <div>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </div>
+        ) : (
+          <button type="button" onClick={logout}>
+            logout
+          </button>
+        )}
         <Link to="/about">Maps</Link>
-        <Link to="/reservations" hidden={list[0] ? false : true}>
-          Reservations
-        </Link>
+
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}
           onClick={showNavbar}
