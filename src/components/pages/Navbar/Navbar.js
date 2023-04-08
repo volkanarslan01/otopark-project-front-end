@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { background, color } from "@chakra-ui/react";
 
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
@@ -27,11 +28,21 @@ function Navbar() {
             <Link to="/register">Register</Link>
           </div>
         ) : (
-          <button type="button" onClick={logout}>
-            logout
+          <button
+            type="button"
+            style={{
+              background: "#fff",
+              color: "#333",
+              borderRadius: "15px",
+              padding: "3px",
+              width: "75px",
+            }}
+            onClick={logout}
+          >
+            Logout
           </button>
         )}
-        <Link to="/about">Maps</Link>
+        <Link to="/map">Maps</Link>
 
         <button
           className={`${classes["nav-btn"]} ${classes["nav-close-btn"]}`}

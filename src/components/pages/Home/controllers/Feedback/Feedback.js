@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "../../../../../Api/axios";
-
-// import classes from "../Process/LastReservation.module.scss";
-
 import classes from "./FeedBack.module.scss";
 const Feedback = () => {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
   const [list, setList] = useState([]);
-
   useEffect(() => {
     try {
       axios.get("/users").then((res) => {
@@ -22,27 +15,19 @@ const Feedback = () => {
     }
   }, []);
 
-  useEffect(() => {
-    list.forEach((data) => {
-      setEmail(data.email);
-      setName(data.first_name);
-      setSurname(data.last_name);
-    });
-  });
-
-  const onChangeSumbit = () => {
-    if (email === "") {
+  const onChangeSumbit = async () => {
+    if (list.email === "") {
       return setMessage("Please enter user");
     } else if (feedback === "") {
       return setMessage("Please enter feedback");
     } else {
       try {
-        axios
+        await axios
           .post("/feedback", {
-            name: name,
-            surname: surname,
-            email: email,
-            feedback: feedback,
+            name: list.name,
+            surname: list.surname,
+            email: list.email,
+            content: feedback,
           })
           .then((res) => {
             if (res.status === 200) {
