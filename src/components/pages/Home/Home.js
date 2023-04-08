@@ -23,6 +23,7 @@ export default function Home() {
       </div>
       <div className={classes.container}>
         <div className={classes.box}>
+          <h2 className={classes.h2}>Reservation Operations</h2>
           <MakeReservations />
         </div>
       </div>
