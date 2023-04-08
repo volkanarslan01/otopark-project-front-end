@@ -44,3 +44,12 @@
   display: flex;
   justify-content: center;
 }
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .h1 {
+    font-weight: bold;
+    text-shadow: 3px 3px 3px #737373;
+  }
+}

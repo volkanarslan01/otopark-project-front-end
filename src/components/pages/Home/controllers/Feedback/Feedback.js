@@ -9,6 +9,7 @@ const Feedback = () => {
     try {
       axios.get("/users").then((res) => {
         setList(res.data);
+        console.log(res.data);
       });
     } catch (e) {
       setMessage(e);
