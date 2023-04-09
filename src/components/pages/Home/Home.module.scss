@@ -60,3 +60,8 @@
   font-weight: bold;
   text-shadow: 3px 3px 3px #737373;
 }
+@media only screen and (max-width: 768px) {
+  .header {
+    display: block;
+  }
+}

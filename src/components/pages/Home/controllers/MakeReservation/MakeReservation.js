@@ -11,6 +11,7 @@ import axios from "../../../../../Api/axios";
 import { FaInfo } from "react-icons/fa";
 
 const MakeReservation = () => {
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   return (
     <>
       <div className={classes.datebox}>
@@ -26,6 +27,40 @@ const MakeReservation = () => {
           onChange={""}
           value={""}
         />
+      </div>
+
+      <div className={classes.process}>
+        <div className={classes.drop_box}>
+          <Dropdown
+            className={classes.dropdown}
+            options={""}
+            onChange={""}
+            value={""}
+            placeholder="Select an Park"
+          />
+          <Dropdown
+            className={classes.dropdown}
+            onChange={""}
+            options={arr}
+            value={""}
+            placeholder="Select an Kat"
+          />
+          <Dropdown
+            className={classes.dropdown}
+            onChange={""}
+            options={arr}
+            value={""}
+            placeholder="Select an Parking Space"
+          />
+        </div>
+      </div>
+      <div className={classes.main_info}>
+        <div className={classes.info}>
+          <h3 className={classes.park_name}>Name: Park A</h3>
+          <h3 className={classes.park_kat}>Kat: A</h3>
+          <h3 className={classes.park_pay}>Pay: 50 TL</h3>
+          <h3 className={classes.park_time}>Open/Close: 8.00 am / 18.00 pm</h3>
+        </div>
       </div>
     </>
   );

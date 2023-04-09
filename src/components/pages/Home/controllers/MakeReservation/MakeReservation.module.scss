@@ -6,3 +6,36 @@
     margin: 10px;
   }
 }
+.drop_box {
+  display: flex;
+  margin: 30px 0;
+  .dropdown {
+    margin: 5px;
+  }
+}
+
+.process {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .info {
+    width: 595px;
+    border: 1px solid #bab8b8;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  h3 {
+    font-weight: 500;
+  }
+  .park_pay {
+    color: #008000;
+  }
+}

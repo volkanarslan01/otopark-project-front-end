@@ -22,7 +22,7 @@ import { useState, useRef } from "react";
 const center = { lat: 36.966034, lng: 28.688593 };
 function Maps() {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyD04A8KnsPhuz5EXgvDFUCDOUpx4rv0qyw",
+    googleMapsApiKey: "AIzaSyA43G7B0jCRFYeDCW5-pxPe1_bzwCNIBKc",
     libraries: ["places"],
   });
   const [map, setMap] = useState(/** @type google.maps.Map  */ (null));
