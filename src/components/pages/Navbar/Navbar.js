@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import classes from "./navbar.module.scss";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { background, color } from "@chakra-ui/react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
@@ -22,25 +22,31 @@ function Navbar() {
     <header className={classes.header}>
       <nav ref={navRef} className={classes.nav}>
         <Link to="/">Home</Link>
+
         {!cookies.access_token ? (
-          <div>
+          <div className={classes.hide}>
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </div>
         ) : (
-          <button
-            type="button"
-            style={{
-              background: "#fff",
-              color: "#333",
-              borderRadius: "15px",
-              padding: "3px",
-              width: "75px",
-            }}
-            onClick={logout}
-          >
-            Logout
-          </button>
+          <div className={classes.visible}>
+            <button
+              type="button"
+              style={{
+                background: "#fff",
+                color: "#333",
+                borderRadius: "15px",
+                padding: "3px",
+                width: "75px",
+              }}
+              onClick={logout}
+            >
+              Logout
+            </button>
+            <Link to="/user">
+              <FontAwesomeIcon icon={faUser} className={classes.icon} />
+            </Link>
+          </div>
         )}
         <Link to="/map">Maps</Link>
 

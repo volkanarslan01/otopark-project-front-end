@@ -7,6 +7,7 @@ import Maps from "../src/components/pages/Maps/Maps.js";
 import Reservations from "../src/components/pages/Reservations/Reservations.js";
 import { Route, Routes } from "react-router-dom";
 import Particles from "../src/components/Particles.jsx";
+import User from "./components/pages/User/user.js";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
               <Route path="/register" element={<Register />}></Route>
               <Route path="/map" element={<Maps />}></Route>
               <Route path="/reservations" element={<Reservations />}></Route>
+              <Route path="/user" element={<User />}></Route>
             </Route>
           </Routes>
         </div>
