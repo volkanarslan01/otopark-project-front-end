@@ -64,3 +64,13 @@
     color: #fff;
   }
 }
+
+.error_box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  .err {
+    color: rgb(187, 25, 25);
+    font-weight: bold;
+  }
+}

@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import axios from "../../../../../Api/axios";
 
 const MakeReservation = () => {
+  const [err, setError] = useState("");
   const [park, setPark] = useState([]);
   const [parks, setParks] = useState([]);
   const [kats, setKats] = useState([]);
@@ -20,7 +21,8 @@ const MakeReservation = () => {
   const [selected_date1, setSelected_date1] = useState(new Date());
   const [selected_date2, setSelected_date2] = useState(new Date());
 
-  const date_now = Date.now();
+  const date_now = new Date();
+  const plus_date = date_now.getTime() + 3600000;
   // ? park process
   useEffect(() => {
     axios.get("/park").then((res) => {
@@ -52,24 +54,37 @@ const MakeReservation = () => {
     });
   }, []);
 
-  console.log(typeof selected_kat);
-  useEffect(() => {
-    if (selected_kat.value) {
-      const block = park.map((e) => {
-        let i = 0;
-        // if (e.block[i] === selected_kat[i]) {
-        console.log(e.block[i]);
-        i++;
-        // }
-      });
-    }
-  }, [selected_kat.value]);
-
-  // ! Date
-
+  // ?
+  // console.log(typeof selected_kat);
+  // useEffect(() => {
+  //   if (selected_kat.value) {
+  //     const block = park.map((e) => {
+  //       let i = 0;
+  //       // if (e.block[i] === selected_kat[i]) {
+  //       console.log(e.block[i]);
+  //       i++;
+  //       // }
+  //     });
+  //   }
+  // }, [selected_kat.value]);
+  // ! DATE PROCESS AND CHECK
   const onClick = () => {
     if (check === undefined || window.localStorage.userID === undefined)
-      return console.log("Please enter user");
+      return setError("Please enter user");
+    else if (
+      selected_date1.getTime() < date_now.getTime() ||
+      selected_date2.getTime() < date_now.getTime()
+    ) {
+      return setError("You can book at least one hour later");
+    } else if (selected_date1.getTime() === selected_date2.getTime()) {
+      return setError("You can make a reservation for at least one hour");
+    } else if (
+      selected_kat.value === undefined ||
+      selected_park.value === undefined ||
+      selected_space === undefined
+    ) {
+      return setError("Please select parking, floor and parking space");
+    }
   };
 
   return (
@@ -119,6 +134,9 @@ const MakeReservation = () => {
           Sumbit
         </button>
       </div>
+      <div className={classes.error_box}>
+        <h2 className={classes.err}>{err}</h2>
+      </div>
       <div className={classes.main_info}>
         <div className={classes.info}>
           <p className={classes.park_pay}>Pay: 50 TL</p>
@@ -131,36 +149,6 @@ const MakeReservation = () => {
     </>
   );
 };
-// const MakeReservation = () => {
-//   // ? message
-//   const [message, setMessage] = useState("");
-//   // ! date state
-//   const [value, onChange] = useState(new Date());
-//   const [value_1, onChanged] = useState(new Date());
-
-//   // ? state
-//   const [_first_name, setfirst_name] = useState("");
-//   const [_last_name, setlast_name] = useState("");
-//   const [_place_name, setplace] = useState("");
-//   const [_pay, setpay] = useState(0);
-//   const [_state, setstate] = useState(0);
-//   const [_email, setemail] = useState("");
-//   const [openHours, setopenHours] = useState("");
-//   const [_kat_state, setkat_state] = useState(0);
-//   const [kat_name, setKat_name] = useState("");
-//   // ? itemsz
-//   const [item, setitem] = useState([]);
-//   const [item_2, setitem_2] = useState([]);
-//   const [data, setData] = useState([]);
-//   const [userData, setUserData] = useState([]);
-
-//   // ! controller
-//   const [item_controller, setitem_controller] = useState([]);
-//   const [parkController, setparkController] = useState([]);
-
-//   // * selected
-//   const [selected, setselected] = useState("");
-//   const [selected_2, setselected_2] = useState("");
 
 //   // ? values
 //   let options = [];
