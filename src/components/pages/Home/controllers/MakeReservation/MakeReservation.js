@@ -10,11 +10,13 @@ import axios from "../../../../../Api/axios";
 
 const MakeReservation = () => {
   const [park, setPark] = useState([]);
-  const [block, setBlock] = useState();
   const [parks, setParks] = useState([]);
+  const [kats, setKats] = useState([]);
+  const [parking_space, setParkingSpace] = useState([]);
   const [check, setCheck] = useState("");
-  const [selected_park, setSelected_park] = useState("");
-  const [selected_kat, setSelected_kat] = useState("");
+  const [selected_park, setSelected_park] = useState([]);
+  const [selected_kat, setSelected_kat] = useState([]);
+  const [selected_space, setSelected_space] = useState([]);
   const [selected_date1, setSelected_date1] = useState(new Date());
   const [selected_date2, setSelected_date2] = useState(new Date());
 
@@ -26,6 +28,7 @@ const MakeReservation = () => {
     });
   }, []);
 
+  // ? Selected PROCESS
   useEffect(() => {
     const parks = park.map((park) => {
       return park.name;
@@ -33,12 +36,34 @@ const MakeReservation = () => {
     setParks(parks);
   }, [park]);
 
+  useEffect(() => {
+    if (selected_park.value) {
+      park.map((e) => {
+        if (e.name === selected_park.value) {
+          return setKats(e.kat);
+        }
+      });
+    }
+  }, [selected_park.value]);
   // * User get
   useEffect(() => {
     axios.get("/users").then((res) => {
       setCheck(res.data.email);
     });
   }, []);
+
+  console.log(typeof selected_kat);
+  useEffect(() => {
+    if (selected_kat.value) {
+      const block = park.map((e) => {
+        let i = 0;
+        // if (e.block[i] === selected_kat[i]) {
+        console.log(e.block[i]);
+        i++;
+        // }
+      });
+    }
+  }, [selected_kat.value]);
 
   // ! Date
 
@@ -76,15 +101,15 @@ const MakeReservation = () => {
           <Dropdown
             className={classes.dropdown}
             onChange={setSelected_kat}
-            options={""}
-            value={""}
+            options={kats}
+            value={kats[0]}
             placeholder="Select an Kat"
           />
           <Dropdown
             className={classes.dropdown}
-            onChange={""}
-            options={""}
-            value={""}
+            onChange={selected_space}
+            options={parking_space}
+            value={parking_space[0]}
             placeholder="Select an Parking Space"
           />
         </div>
