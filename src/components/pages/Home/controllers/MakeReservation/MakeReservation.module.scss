@@ -20,11 +20,15 @@
   align-items: center;
 }
 .main_info {
+  p {
+    font-weight: bold;
+    font-size: 13px;
+  }
   display: flex;
   justify-content: center;
   align-items: center;
   .info {
-    width: 595px;
+    width: 700px;
     border: 1px solid #bab8b8;
     border-radius: 5px;
     padding: 20px;
@@ -32,10 +36,31 @@
     justify-content: space-between;
     align-items: center;
   }
-  h3 {
-    font-weight: 500;
-  }
   .park_pay {
     color: #008000;
+  }
+  .park_place {
+    color: #07668b;
+  }
+  .park_time {
+    color: #8b5d07;
+  }
+}
+.box_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .btn {
+    width: 100px;
+    height: 35px;
+    margin-bottom: 25px;
+    border: 1px solid #c5c0c0;
+    border-radius: 15px;
+    transition: all 0.7s;
+  }
+  .btn:hover {
+    border: 1px solid #fff;
+    background-color: #333;
+    color: #fff;
   }
 }

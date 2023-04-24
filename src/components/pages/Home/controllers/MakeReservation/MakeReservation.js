@@ -8,24 +8,59 @@ import "react-clock/dist/Clock.css";
 import { useState, useEffect } from "react";
 import axios from "../../../../../Api/axios";
 
-import { FaInfo } from "react-icons/fa";
-
 const MakeReservation = () => {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  const [park, setPark] = useState([]);
+  const [block, setBlock] = useState();
+  const [parks, setParks] = useState([]);
+  const [check, setCheck] = useState("");
+  const [selected_park, setSelected_park] = useState("");
+  const [selected_kat, setSelected_kat] = useState("");
+  const [selected_date1, setSelected_date1] = useState(new Date());
+  const [selected_date2, setSelected_date2] = useState(new Date());
+
+  const date_now = Date.now();
+  // ? park process
+  useEffect(() => {
+    axios.get("/park").then((res) => {
+      setPark(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const parks = park.map((park) => {
+      return park.name;
+    });
+    setParks(parks);
+  }, [park]);
+
+  // * User get
+  useEffect(() => {
+    axios.get("/users").then((res) => {
+      setCheck(res.data.email);
+    });
+  }, []);
+
+  // ! Date
+
+  const onClick = () => {
+    if (check === undefined || window.localStorage.userID === undefined)
+      return console.log("Please enter user");
+  };
+
   return (
     <>
       <div className={classes.datebox}>
         <DateTimePicker
           disableClock={true}
           className={classes.date}
-          onChange={""}
-          value={""}
+          onChange={setSelected_date1}
+          value={selected_date1}
         />
         <DateTimePicker
           disableClock={true}
           className={classes.date}
-          onChange={""}
-          value={""}
+          onChange={setSelected_date2}
+          value={selected_date2}
         />
       </div>
 
@@ -33,33 +68,39 @@ const MakeReservation = () => {
         <div className={classes.drop_box}>
           <Dropdown
             className={classes.dropdown}
-            options={""}
-            onChange={""}
-            value={""}
+            options={parks}
+            onChange={setSelected_park}
+            value={parks[0]}
             placeholder="Select an Park"
           />
           <Dropdown
             className={classes.dropdown}
-            onChange={""}
-            options={arr}
+            onChange={setSelected_kat}
+            options={""}
             value={""}
             placeholder="Select an Kat"
           />
           <Dropdown
             className={classes.dropdown}
             onChange={""}
-            options={arr}
+            options={""}
             value={""}
             placeholder="Select an Parking Space"
           />
         </div>
       </div>
+      <div className={classes.box_btn}>
+        <button className={classes.btn} onClick={onClick}>
+          Sumbit
+        </button>
+      </div>
       <div className={classes.main_info}>
         <div className={classes.info}>
-          <h3 className={classes.park_name}>Name: Park A</h3>
-          <h3 className={classes.park_kat}>Kat: A</h3>
-          <h3 className={classes.park_pay}>Pay: 50 TL</h3>
-          <h3 className={classes.park_time}>Open/Close: 8.00 am / 18.00 pm</h3>
+          <p className={classes.park_pay}>Pay: 50 TL</p>
+          <p className={classes.park_time}>Open/Close: 8.00 am / 18.00 pm</p>
+          <p className={classes.park_place}>
+            Place: Muğla/Menteşe Hacıbektaş Caddesi No: 12 Rüya Park Karşısı
+          </p>
         </div>
       </div>
     </>

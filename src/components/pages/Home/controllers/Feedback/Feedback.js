@@ -9,7 +9,6 @@ const Feedback = () => {
     try {
       axios.get("/users").then((res) => {
         setList(res.data);
-        console.log(res.data);
       });
     } catch (e) {
       setMessage(e);
@@ -17,7 +16,7 @@ const Feedback = () => {
   }, []);
 
   const onChangeSumbit = async () => {
-    if (list.email === "") {
+    if (list.email === undefined || list.email === "") {
       return setMessage("Please enter user");
     } else if (feedback === "") {
       return setMessage("Please enter feedback");
