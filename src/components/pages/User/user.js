@@ -1,32 +1,75 @@
 import { useEffect, useState } from "react";
 import axios from "../../../Api/axios";
-
-import classes from "./user.module.scss";
 import user from "../../../assets/user.gif";
+import classes from "./user.module.scss";
+import * as Yup from "yup";
+import userG from "../../../assets/user.gif";
 import { Formik, Form } from "formik";
 import { TextField } from "../Register/TextField.js";
 const User = () => {
-  useEffect(() => {}, []);
+  const [users, setUsers] = useState([]);
+  const [err, setErrors] = useState("");
+  const [valid, setValid] = useState("");
+  const validate = Yup.object({
+    firstName: Yup.string()
+      .max(15, "Must be 15 characters or less")
+      .required("Required"),
+    lastName: Yup.string()
+      .max(20, "Must be 20 characters or less")
+      .required("Required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 6 charaters")
+      .required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Password must match")
+      .required("Confirm password is required"),
+    plate: Yup.string()
+      .max(20, "Must be 20 characters or less")
+      .required("Required"),
+  });
+  useEffect(() => {
+    axios.get("/users").then((res) => {
+      setUsers(res.data);
+    });
+  }, []);
   const onSubmitButton = async (values) => {
-    console.log(values.firstName);
+    console.log(valid);
     try {
-      await axios.post("/user", {
-        name: values.firstName,
-        surname: values.lastName,
-        plate: values.plate,
-        email: values.email,
-        password: values.password,
-      });
-    } catch (error) {}
+      if (valid) {
+        await axios.put("/update", {
+          name: values.firstName,
+          surname: values.lastName,
+          plate: values.plate,
+          email: values.email,
+          password: values.password,
+        });
+      }
+    } catch (err) {}
   };
-  return (
+  const onChangedValue = (e) => {
+    try {
+      axios
+        .post("/validate", {
+          email: users.email,
+          password: e,
+        })
+        .then((res) => {
+          setErrors(res.data.msg);
+          setValid(res.data);
+        });
+    } catch (e) {
+      setErrors(e);
+    }
+  };
+  return !users.email == "" ? (
     <Formik
+      validationSchema={validate}
       initialValues={{
-        firstName: "Volkan",
-        lastName: "",
-        email: "",
-        plate: "",
-        password: "",
+        firstName: users.name,
+        lastName: users.surname,
+        email: users.email,
+        plate: users.plate,
       }}
       onSubmit={(values) => onSubmitButton(values)}
     >
@@ -37,6 +80,14 @@ const User = () => {
             <TextField label="Last Name" name="lastName" type="text" />
             <TextField label="Email" name="email" type="email" />
             <TextField label="Plate" name="plate" type="text" />
+            <TextField
+              label="Old Password"
+              name="oldpassword"
+              type="password"
+              onChange={(e) => onChangedValue(e.target.value)}
+            />
+            {err ? <h4 className={classes.error}>{err}</h4> : null}
+
             <TextField label="Password" name="password" type="password" />
             <TextField
               label="Confirm Password"
@@ -49,11 +100,16 @@ const User = () => {
             <button className="btn btn-dark m-3" type="reset">
               Reset
             </button>
-            {/* {err ? <h4 className={classes.error}>{err}</h4> : null} */}
           </Form>
+
+          <div className={classes.img_box}>
+            <img className={classes.img} src={userG} alt={"I dont image"} />
+          </div>
         </div>
       )}
     </Formik>
+  ) : (
+    <img src={userG} alt={"I dont image"} />
   );
 };
 

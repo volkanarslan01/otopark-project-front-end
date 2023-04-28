@@ -22,7 +22,6 @@ const MakeReservation = () => {
   const [selected_date2, setSelected_date2] = useState(new Date());
 
   const date_now = new Date();
-  const plus_date = date_now.getTime() + 3600000;
   // ? park process
   useEffect(() => {
     axios.get("/park").then((res) => {
