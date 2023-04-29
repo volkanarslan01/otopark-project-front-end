@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "../../../Api/axios";
-import user from "../../../assets/user.gif";
 import classes from "./user.module.scss";
 import * as Yup from "yup";
 import userG from "../../../assets/user.gif";
 import { Formik, Form } from "formik";
 import { TextField } from "../Register/TextField.js";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 const User = () => {
+  const [cookies, setCookies] = useCookies(["access_token"]);
   const [users, setUsers] = useState([]);
   const [err, setErrors] = useState("");
   const [valid, setValid] = useState("");
+  const navigate = useNavigate();
+
   const validate = Yup.object({
     firstName: Yup.string()
       .max(15, "Must be 15 characters or less")
@@ -31,21 +35,39 @@ const User = () => {
   useEffect(() => {
     axios.get("/users").then((res) => {
       setUsers(res.data);
+      console.log(res.data);
     });
   }, []);
+
+  const logout = () => {
+    setCookies("access_token", "");
+    window.localStorage.removeItem("userID");
+    navigate("/login");
+  };
+
   const onSubmitButton = async (values) => {
-    console.log(valid);
     try {
       if (valid) {
-        await axios.put("/update", {
-          name: values.firstName,
-          surname: values.lastName,
-          plate: values.plate,
-          email: values.email,
-          password: values.password,
-        });
+        await axios
+          .put("/update", {
+            name: values.firstName,
+            surname: values.lastName,
+            plate: values.plate,
+            email: values.email,
+            password: values.password,
+            _id: valid,
+          })
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              setErrors(response.data.msg);
+              logout();
+            }
+          });
       }
-    } catch (err) {}
+    } catch (err) {
+      setErrors(err);
+    }
   };
   const onChangedValue = (e) => {
     try {

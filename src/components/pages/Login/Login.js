@@ -23,6 +23,9 @@ export default function Login() {
         email: values.email,
         password: values.password,
       });
+      if (response.data.msg === "Password is incorrect") {
+        return setError("Password is incorrect");
+      }
       navigate("/");
       setCookies("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.user_ID);
@@ -52,6 +55,7 @@ export default function Login() {
               <button className="btn btn-dark m-3" type="reset">
                 Reset
               </button>
+              {err ? <h3>{err}</h3> : null}
             </Form>
           </div>
         )}
