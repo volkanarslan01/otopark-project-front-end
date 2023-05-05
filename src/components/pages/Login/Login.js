@@ -24,11 +24,14 @@ export default function Login() {
         password: values.password,
       });
       if (response.data.msg === "Password is incorrect") {
-        return setError("Password is incorrect");
+        return setError("The combination of email and password is not correct");
+      } else if (response.data.msg === "User not found") {
+        return setError("The combination of email and password is not correct");
+      } else if (response.data) {
+        navigate("/");
+        setCookies("access_token", response.data.token);
+        window.localStorage.setItem("userID", response.data.user_ID);
       }
-      navigate("/");
-      setCookies("access_token", response.data.token);
-      window.localStorage.setItem("userID", response.data.user_ID);
     } catch (error) {
       setError(error);
     }

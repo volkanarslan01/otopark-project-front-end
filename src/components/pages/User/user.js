@@ -44,10 +44,9 @@ const User = () => {
     window.localStorage.removeItem("userID");
     navigate("/login");
   };
-
   const onSubmitButton = async (values) => {
     try {
-      if (valid) {
+      if (valid && !err) {
         await axios
           .put("/update", {
             name: values.firstName,
@@ -57,11 +56,15 @@ const User = () => {
             password: values.password,
             _id: valid,
           })
-          .then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-              setErrors(response.data.msg);
-              logout();
+          .then((res) => {
+            console.log(res.data.msg);
+            if (res.data.msg === "Update Succesful") {
+              setTimeout(() => {
+                setErrors(res.data.msg);
+                logout();
+              }, 2000);
+            } else {
+              setErrors(res.data.msg);
             }
           });
       }
