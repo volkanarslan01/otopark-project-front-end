@@ -28,7 +28,6 @@ const MakeReservation = () => {
       setPark(res.data);
     });
   }, []);
-
   // ? Selected PROCESS
   useEffect(() => {
     const parks = park.map((park) => {
@@ -66,6 +65,7 @@ const MakeReservation = () => {
   //     });
   //   }
   // }, [selected_kat.value]);
+
   // ! DATE PROCESS AND CHECK
   const onClick = () => {
     if (check === undefined || window.localStorage.userID === undefined)

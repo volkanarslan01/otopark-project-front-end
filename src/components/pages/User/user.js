@@ -25,6 +25,9 @@ const User = () => {
     password: Yup.string()
       .min(8, "Password must be at least 6 charaters")
       .required("Password is required"),
+    oldpassword: Yup.string()
+      .min(8, "Password must be at least 6 charaters")
+      .required("Password is required"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Password must match")
       .required("Confirm password is required"),
@@ -35,10 +38,10 @@ const User = () => {
   useEffect(() => {
     axios.get("/users").then((res) => {
       setUsers(res.data);
-      console.log(res.data);
     });
   }, []);
 
+  console.log(users._id);
   const logout = () => {
     setCookies("access_token", "");
     window.localStorage.removeItem("userID");
@@ -46,55 +49,66 @@ const User = () => {
   };
   const onSubmitButton = async (values) => {
     try {
-      if (valid && !err) {
-        await axios
-          .put("/update", {
-            name: values.firstName,
-            surname: values.lastName,
-            plate: values.plate,
-            email: values.email,
-            password: values.password,
-            _id: valid,
-          })
-          .then((res) => {
-            console.log(res.data.msg);
-            if (res.data.msg === "Update Succesful") {
-              setTimeout(() => {
-                setErrors(res.data.msg);
-                logout();
-              }, 2000);
-            } else {
+      await axios
+        .put("/update", {
+          name: values.firstName,
+          surname: values.lastName,
+          plate: values.plate,
+          email: values.email,
+          oldpassword: values.oldpassword,
+          password: values.password,
+          _id: users._id,
+        })
+        .then((res) => {
+          console.log(res.data.msg);
+          if (res.data.msg === "Update Succesful") {
+            setTimeout(() => {
               setErrors(res.data.msg);
-            }
-          });
-      }
+              logout();
+            }, 2000);
+          } else {
+            setErrors(res.data.msg);
+          }
+        });
     } catch (err) {
       setErrors(err);
     }
   };
-  const onChangedValue = (e) => {
-    try {
-      axios
-        .post("/validate", {
-          email: users.email,
-          password: e,
-        })
-        .then((res) => {
-          setErrors(res.data.msg);
-          setValid(res.data);
-        });
-    } catch (e) {
-      setErrors(e);
-    }
-  };
+  // ?  validate email and password
+  // const onChangedValue_email = (e) => {
+  //   try {
+  //     axios
+  //       .post("/valid", {
+  //         email: e,
+  //       })
+  //       .then((res) => {
+  //         setErrors(res.data.msg);
+  //       });
+  //   } catch (err) {}
+  // };
+  // const onChangedValue_password = (e) => {
+  //   try {
+  //     axios
+  //       .post("/validate", {
+  //         email: users.email,
+  //         password: e,
+  //       })
+  //       .then((res) => {
+  //         setErrors(res.data.msg);
+  //         setValid(res.data);
+  //       });
+  //   } catch (e) {
+  //     setErrors(e);
+  //   }
+  // };
   return !users.email == "" ? (
     <Formik
       validationSchema={validate}
       initialValues={{
         firstName: users.name,
         lastName: users.surname,
-        email: users.email,
         plate: users.plate,
+        email: users.email,
       }}
       onSubmit={(values) => onSubmitButton(values)}
     >
@@ -109,7 +123,6 @@ const User = () => {
               label="Old Password"
               name="oldpassword"
               type="password"
-              onChange={(e) => onChangedValue(e.target.value)}
             />
             {err ? <h4 className={classes.error}>{err}</h4> : null}
 
@@ -120,10 +133,7 @@ const User = () => {
               type="password"
             />
             <button className="btn btn-dark m-3" type="submit">
-              Register
-            </button>
-            <button className="btn btn-dark m-3" type="reset">
-              Reset
+              Update
             </button>
           </Form>
 
