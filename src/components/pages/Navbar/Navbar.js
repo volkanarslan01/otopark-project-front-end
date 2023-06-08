@@ -46,6 +46,7 @@ function Navbar() {
             <Link to="/user">
               <FontAwesomeIcon icon={faUser} className={classes.icon} />
             </Link>
+            <Link to="/reservations">My Reservations</Link>
           </div>
         )}
         <Link to="/map">Maps</Link>

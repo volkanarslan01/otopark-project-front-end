@@ -53,18 +53,14 @@ const MakeReservation = () => {
   }, []);
 
   // ?
-  // console.log(typeof selected_kat);
-  // useEffect(() => {
-  //   if (selected_kat.value) {
-  //     const block = park.map((e) => {
-  //       let i = 0;
-  //       // if (e.block[i] === selected_kat[i]) {
-  //       console.log(e.block[i]);
-  //       i++;
-  //       // }
-  //     });
-  //   }
-  // }, [selected_kat.value]);
+
+  useEffect(() => {
+    const findPark = park.filter(
+      (parkName) => parkName.name == selected_park.value
+    );
+    const findKat = findPark.map((b) => b.Block);
+    
+  }, [selected_kat]);
 
   // ! DATE PROCESS AND CHECK
   const onClick = () => {

@@ -41,7 +41,6 @@ const User = () => {
     });
   }, []);
 
-  console.log(users._id);
   const logout = () => {
     setCookies("access_token", "");
     window.localStorage.removeItem("userID");
@@ -60,7 +59,6 @@ const User = () => {
           _id: users._id,
         })
         .then((res) => {
-          console.log(res.data.msg);
           if (res.data.msg === "Update Succesful") {
             setTimeout(() => {
               setErrors(res.data.msg);
@@ -75,32 +73,6 @@ const User = () => {
     }
   };
   // ?  validate email and password
-  // const onChangedValue_email = (e) => {
-  //   try {
-  //     axios
-  //       .post("/valid", {
-  //         email: e,
-  //       })
-  //       .then((res) => {
-  //         setErrors(res.data.msg);
-  //       });
-  //   } catch (err) {}
-  // };
-  // const onChangedValue_password = (e) => {
-  //   try {
-  //     axios
-  //       .post("/validate", {
-  //         email: users.email,
-  //         password: e,
-  //       })
-  //       .then((res) => {
-  //         setErrors(res.data.msg);
-  //         setValid(res.data);
-  //       });
-  //   } catch (e) {
-  //     setErrors(e);
-  //   }
-  // };
   return !users.email == "" ? (
     <Formik
       validationSchema={validate}

@@ -1,9 +1,13 @@
-.header {
+.ui {
   display: flex;
   justify-content: space-around;
-  .img {
-    width: 25%;
+  .box_ui {
+    width: 50%;
   }
+}
+
+.fot_box_list {
+  display: flex;
 }
 .box {
   color: #096509;
@@ -48,4 +52,15 @@
 .err {
   font-size: 30px;
   text-align: center;
+}
+.deserted_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .deserted {
+    object-fit: cover;
+    width: 600px;
+    height: 300px;
+    margin: 10px;
+  }
 }

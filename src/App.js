@@ -23,6 +23,7 @@ function App() {
               <Route path="/map" element={<Maps />}></Route>
               <Route path="/reservations" element={<Reservations />}></Route>
               <Route path="/user" element={<User />}></Route>
+              <Route path="/reservations" element={<Reservations />}></Route>
             </Route>
           </Routes>
         </div>
