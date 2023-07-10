@@ -14,7 +14,7 @@ const MakeReservation = () => {
   const [parks, setParks] = useState([]);
   const [kats, setKats] = useState([]);
   const [parking_space, setParkingSpace] = useState([]);
-  const [check, setCheck] = useState("");
+  const [check, setCheck] = useState({});
   const [selected_park, setSelected_park] = useState([]);
   const [selected_kat, setSelected_kat] = useState([]);
   const [selected_space, setSelected_space] = useState([]);
@@ -48,18 +48,22 @@ const MakeReservation = () => {
   // * User get
   useEffect(() => {
     axios.get("/users").then((res) => {
-      setCheck(res.data.email);
+      setCheck(res.data);
     });
   }, []);
 
   // ?
-
+  useEffect(() => {
+    let obj = Object.entries(check);
+    obj.map((obj) => {
+      console.log(obj[1]);
+    });
+  });
   useEffect(() => {
     const findPark = park.filter(
       (parkName) => parkName.name == selected_park.value
     );
     const findKat = findPark.map((b) => b.Block);
-    
   }, [selected_kat]);
 
   // ! DATE PROCESS AND CHECK

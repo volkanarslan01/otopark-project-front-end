@@ -35,6 +35,9 @@
   .faCard {
     color: #e69d00;
   }
+  .fabuild {
+    color: #333;
+  }
   .faTimes {
     color: #ff0000;
   }
@@ -63,4 +66,8 @@
     height: 300px;
     margin: 10px;
   }
+}
+
+.main {
+  display: flex;
 }

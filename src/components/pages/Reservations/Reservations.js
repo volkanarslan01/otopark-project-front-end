@@ -14,60 +14,141 @@ import {
   FaCreditCard,
   FaCheck,
   FaTimes,
+  FaBuilding,
 } from "react-icons/fa";
 const Reservations = () => {
-  const [getList, setList] = useState([]);
-  const [getCheck, setCheck] = useState(false);
-
-  // ? requests
-
-  console.log(getList.find("_id"));
+  const [message, setMessage] = useState(false);
+  const [objList, setObjList] = useState([]);
+  const [obj, setObj] = useState();
+  let [list, setList] = useState([]);
+  // !  otopark data get
   useEffect(() => {
     try {
-      axios
-        .post("/reservations", {
-          userID: window.localStorage.getItem("userID"),
-        })
-        .then((r) => {
-          if (r.data === true) {
-            try {
-              axios.get("/reservations").then((r) => {
-                setList(r.data);
-              });
-            } catch (err) {}
-          }
-        });
-    } catch (err) {}
+      axios.get("/users").then((r) => {
+        setObj(r.data);
+      });
+    } catch (e) {
+      setMessage(e);
+    }
   }, []);
 
-  useEffect(() => {});
-  // ! UI portion
+  let reservationList = async () => {
+    if (obj != undefined) {
+      await axios
+        .post("/reservations", {
+          _email: obj.email,
+        })
+        .then((r) => {
+          setObjList(r.data.result);
+        });
+    }
+  };
+  reservationList();
+  let arr = [];
+  let printObj = async () => {
+    objList.map((obj) => {
+      arr.push(Object.values(obj));
+    });
+  };
 
+  printObj();
+  // ! booking cancellation
+  const onCancelSumbit = (id, parkName, time_2) => {
+    let now = new Date();
+    let time = time_2 - 3600000;
+    let _kat_state;
+    try {
+      if (now.getTime() > time) {
+        return setMessage("There`s no cancellation in the last hour");
+      }
+      axios({
+        method: "DELETE",
+        url: "http://localhost:3004/cancel",
+        data: {
+          id: id,
+          parkName: parkName,
+          kat_state: _kat_state,
+        },
+      });
+      window.location.reload();
+    } catch (err) {
+      setMessage(err);
+    }
+  };
   return (
-    <div>
-      <div className={classes.main}>
-        <div className={classes.ui}>
-          <div className={classes.box_ui}>
-            <img src={r_img} alt={"Not Content"} />
-          </div>
-          <div className={classes.box_ui}>
-            <img src={f_img} alt={"Not Content"} />
-          </div>
+    <>
+      <div className={""}>
+        <div className={classes.header}>
+          <Player
+            autoplay
+            loop
+            src="https://assets6.lottiefiles.com/packages/lf20_7vph1npx.json"
+            style={{ height: "300px", width: "500px" }}
+          >
+            <Controls />
+          </Player>
         </div>
+        {objList[0] != undefined ? (
+          arr.map((item) => {
+            const date = new Date(item[5]);
+            const date_ = new Date(item[6]);
+            return (
+              <div className={classes.box}>
+                <div className={classes.parkName}>
+                  <FaParking className={classes.faPark} size={25} />
+                  <label className={classes.label}> Park Name</label>
 
-        {getList != [] ? (
-          <>
-            <div className={classes.fot_box_list}>
-              <div className={classes.name}>
-                <h2>{getList[7] - getList[8]}</h2>
+                  <h2>{item[1]}</h2>
+                </div>
+
+                <div className={classes.place}>
+                  <FaMapMarkerAlt className={classes.faMap} size={25} />
+                  <label className={classes.label}>Place</label>
+                  <h3>{item[2]}</h3>
+                </div>
+                <div className={classes.time}>
+                  <FaClock className={classes.faClock} size={25} />
+                  <label className={classes.label}>Time Interval</label>
+                  <h6>
+                    {date.toLocaleString() + "-" + date_.toLocaleString()}
+                  </h6>
+                </div>
+                <div className={classes.info}>
+                  <FaInfo className={classes.faInfo} size={25} />
+                  <label className={classes.label}>Name - Surname</label>
+                  <h2>
+                    {item[7]} {item[8]}
+                  </h2>
+                  <FaGoogle className={classes.faGoogle} size={25} />
+                  <label className={classes.label}>Email</label>
+                  <h6>{item[11]}</h6>
+                </div>
+
+                <div className={classes.pay}>
+                  <FaBuilding className={classes.fabuild} size={25} />
+                  <label className={classes.label}>Block</label>
+                  <p>{`${item[3] + " " + item[4]}`}</p>
+                </div>
+                <div className={classes.pay}>
+                  <FaCreditCard className={classes.faCard} size={25} />
+                  <label className={classes.label}>Pay</label>
+                  <p>{item[9]} TL</p>
+                </div>
+
+                <div className={classes.state}>
+                  <h4 className={classes.message}>{message}</h4>
+                  <label className={classes.label}>State</label>
+                  <h5>
+                    {item[10] ? (
+                      <FaTimes className={classes.faTimes} />
+                    ) : (
+                      <FaCheck className={classes.FaCheck} />
+                    )}
+                  </h5>
+                </div>
               </div>
-              <div className={classes.park}>
-                <FaParking className={classes.faPark} size={25} />
-                <label className={classes.label}> Park Name</label>
-                <h2>{getList[1]}</h2>
-              </div>
-            </div>
-          </>
+            );
+          })
         ) : (
           <div className={classes.deserted_box}>
             <img
@@ -78,170 +159,17 @@ const Reservations = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
-
 export default Reservations;
-// ? Old Code
 
-// const Reservations = () => {
-//   const [message, setMessage] = useState(false);
-//   const [list, setList] = useState([]);
-//   const [parkList, setParkList] = useState([]);
+/* 
+                  
 
-//   // !  otopark data get
-//   useEffect(() => {
-//     try {
-//       axios.get("/reservations").then((response) => {
-//         setList(response.data);
-//       });
-//     } catch (err) {
-//       setMessage(err);
-//     }
-//   }, []);
+                  
 
-//   // ! booking cancellation
-//   const onCancelSumbit = (id, parkName, time_2) => {
-//     let now = new Date();
-//     let time = time_2 - 3600000;
-//     let _kat_state;
-//     parkList.map((park) => {
-//       if (park.parkName === parkName) {
-//         return (_kat_state = park.kat_state + 1);
-//       }
-//     });
-//     try {
-//       if (now.getTime() > time) {
-//         return setMessage("There`s no cancellation in the last hour");
-//       }
-//       axios({
-//         method: "DELETE",
-//         url: "http://localhost:3004/cancel",
-//         data: {
-//           id: id,
-//           parkName: parkName,
-//           kat_state: _kat_state,
-//         },
-//       });
-//       window.location.reload();
-//     } catch (err) {
-//       setMessage(err);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <div className={classes.main}>
-//         <div className={classes.header}>
-//           <Player
-//             autoplay
-//             loop
-//             src="https://assets6.lottiefiles.com/packages/lf20_7vph1npx.json"
-//             style={{ height: "300px", width: "500px" }}
-//           >
-//             <Controls />
-//           </Player>
-//           <img src={Image} className={classes.img} />
-//         </div>
-//         {list == [] ? (
-//           list.map((item) => {
-//             const {
-//               _id,
-//               park_name,
-//               park_place,
-//               block,
-//               no,
-//               time,
-//               time_,
-//               name,
-//               surname,
-//               pay,
-//               state,
-//               email,
-//             } = item;
-//             const date = new Date(time);
-//             const date_2 = new Date(time_);
-
-//             return (
-//               <div>
-//                 <h2>{park_name}</h2>
-//               </div>
-//               /* <div className={classes.box}>
-//                 <div className={classes.parkName}>
-//                   <FaParking className={classes.faPark} size={25} />
-//                   <label className={classes.label}> Park Name</label>
-
-//                   <h2>{park_name}</h2>
-//                 </div>
-//                 <div className={classes.place}>
-//                   <FaMapMarkerAlt className={classes.faMap} size={25} />
-//                   <label className={classes.label}>Place</label>
-//                   <h3>{park_place}</h3>
-//                 </div>
-
-//                 <div className={classes.time}>
-//                   <FaClock className={classes.faClock} size={25} />
-//                   <label className={classes.label}>Time Interval</label>
-//                   <h6>
-//                     {date.toLocaleString() + "-" + date_2.toLocaleString()}
-//                   </h6>
-//                 </div>
-
-//                 <div className={classes.info}>
-//                   <FaInfo className={classes.faInfo} size={25} />
-//                   <label className={classes.label}>Name - Surname</label>
-//                   <h2>
-//                     {name} {surname}
-//                   </h2>
-//                   <FaGoogle className={classes.faGoogle} size={25} />
-//                   <label className={classes.label}>Email</label>
-//                   <h6>{email}</h6>
-//                 </div>
-//                 <div className={classes.pay}>
-//                   <FaCreditCard className={classes.faCard} size={25} />
-//                   <label className={classes.label}>Pay</label>
-//                   <p>{pay} TL</p>
-//                 </div>
-//                 <div className={classes.state}>
-//                   <h4 className={classes.message}>{message}</h4>
-//                   <label className={classes.label}>State</label>
-//                   <h5>
-//                     {state ? (
-//                       <FaTimes className={classes.faTimes} />
-//                     ) : (
-//                       <FaCheck className={classes.FaCheck} />
-//                     )}
-//                   </h5>
-//                   {state ? (
-//                     <button
-//                       onClick={() => {
-//                         onCancelSumbit(id, parkName, time_2);
-//                       }}
-//                       className={classes.btn}
-//                     >
-//                       Iptal
-//                     </button>
-//                   ) : (
-//                     <button className={classes.btn} disabled={true}>
-//                       Iptal
-//                     </button>
-//                   )}
-//                 </div>
-//               </div> */
-//             );
-//           })
-//         ) : (
-//           <div className={classes.deserted_box}>
-//             <img
-//               src={Deserted}
-//               className={classes.deserted}
-//               alt={"non content"}
-//             ></img>
-//           </div>
-//         )}
-//       </div>
-//     </>
-//   );
-// };
-// export default Reservations;
+     
+                  
+                 
+// </div> */
