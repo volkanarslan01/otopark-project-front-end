@@ -127,7 +127,7 @@ const Reservations = () => {
                 <div className={classes.pay}>
                   <FaBuilding className={classes.fabuild} size={25} />
                   <label className={classes.label}>Block</label>
-                  <p>{`${item[3] + " " + item[4]}`}</p>
+                  <p className={classes.p}>{` ${item[3] + " / " + item[4]}`}</p>
                 </div>
                 <div className={classes.pay}>
                   <FaCreditCard className={classes.faCard} size={25} />

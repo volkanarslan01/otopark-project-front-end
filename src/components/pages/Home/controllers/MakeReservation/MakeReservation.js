@@ -20,7 +20,7 @@ const MakeReservation = () => {
   const [selected_space, setSelected_space] = useState([]);
   const [selected_date1, setSelected_date1] = useState(new Date());
   const [selected_date2, setSelected_date2] = useState(new Date());
-
+  const [info, setInfo] = useState();
   const date_now = new Date();
   // ? park process
   useEffect(() => {
@@ -43,6 +43,13 @@ const MakeReservation = () => {
           return setKats(e.kat);
         }
       });
+      if (selected_park.value) {
+        park.map((e) => {
+          if (e.name === selected_park.value) {
+            setInfo(e);
+          }
+        });
+      }
     }
   }, [selected_park.value]);
   // * User get
@@ -51,38 +58,69 @@ const MakeReservation = () => {
       setCheck(res.data);
     });
   }, []);
-
   // ?
+
   useEffect(() => {
-    let obj = Object.entries(check);
-    obj.map((obj) => {
-      console.log(obj[1]);
+    let katValue = selected_kat.value === 0 ? 0 : selected_kat.value;
+    let parks = park.map((e) => {
+      if (selected_park.value === e.name) {
+        return e.block;
+      }
     });
-  });
-  useEffect(() => {
-    const findPark = park.filter(
-      (parkName) => parkName.name == selected_park.value
-    );
-    const findKat = findPark.map((b) => b.Block);
-  }, [selected_kat]);
+    parks.map((e) => {
+      let selectedSpace = e[katValue];
+      return setParkingSpace(selectedSpace);
+    });
+  }, [selected_kat.value]);
 
   // ! DATE PROCESS AND CHECK
   const onClick = () => {
-    if (check === undefined || window.localStorage.userID === undefined)
+    if (check.email === undefined || window.localStorage.userID === undefined)
       return setError("Please enter user");
     else if (
-      selected_date1.getTime() < date_now.getTime() ||
-      selected_date2.getTime() < date_now.getTime()
+      selected_date1.getTime() < date_now.getTime() &&
+      selected_date2.getTime() <= date_now.getTime()
     ) {
       return setError("You can book at least one hour later");
     } else if (selected_date1.getTime() === selected_date2.getTime()) {
       return setError("You can make a reservation for at least one hour");
     } else if (
       selected_kat.value === undefined ||
-      selected_park.value === undefined ||
-      selected_space === undefined
+      selected_park.value === undefined
+      // selected_space === undefined
     ) {
       return setError("Please select parking, floor and parking space");
+    }
+
+    // ? Calculator
+    let result = selected_date2.getTime() - selected_date1.getTime();
+    let pay = 0;
+    function convertMstoTime(milisecond) {
+      let seconds = Math.floor(milisecond / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+      pay = hours * info.pay && info.pay;
+    }
+    convertMstoTime(result);
+
+    try {
+      axios
+        .post("/reservations/create", {
+          park_name: selected_park.value,
+          park_place: info.place,
+          block: selected_kat.value,
+          No: selected_space.value,
+          time: selected_date1.getTime(),
+          time_: selected_date2.getTime(),
+          name: check.name,
+          surname: check.surname,
+          pay: pay,
+          state: true,
+          email: check.email,
+        })
+        .then((r) => setError(r.data.msg));
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -121,7 +159,7 @@ const MakeReservation = () => {
           />
           <Dropdown
             className={classes.dropdown}
-            onChange={selected_space}
+            onChange={setSelected_space}
             options={parking_space}
             value={parking_space[0]}
             placeholder="Select an Parking Space"
@@ -138,10 +176,20 @@ const MakeReservation = () => {
       </div>
       <div className={classes.main_info}>
         <div className={classes.info}>
-          <p className={classes.park_pay}>Pay: 50 TL</p>
-          <p className={classes.park_time}>Open/Close: 8.00 am / 18.00 pm</p>
+          <p className={classes.park_pay}>
+            Hourly Pay {info !== undefined ? info.pay : ""} TL
+          </p>
+          <p className={classes.park_time}>
+            Open-Hours {info !== undefined ? info.open_hours : ""}
+          </p>
           <p className={classes.park_place}>
-            Place: Muğla/Menteşe Hacıbektaş Caddesi No: 12 Rüya Park Karşısı
+            Place: {info !== undefined ? info.place : ""}
+          </p>
+          <p className={classes.park_info}>
+            Kat : {info !== undefined ? selected_kat.value : ""}
+          </p>
+          <p className={classes.park_info}>
+            No : {info !== undefined ? selected_space.value : ""}
           </p>
         </div>
       </div>
